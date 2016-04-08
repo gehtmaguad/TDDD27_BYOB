@@ -1,0 +1,13 @@
+Development Machine is Ubuntu 15.10
+
+NodeJs, NPM and Express Generator are installed via the Ubuntu package manager:
+sudo apt-get install nodejs
+sudo apt-get install npm
+sudo apt-get install node-express-generator
+
+Project setup is done with commands:
+markus@balbinus:~/BYOB$ express
+markus@balbinus:~/BYOB$ npm install
+
+Adding nodemon via npm package manager globally, so that command is available on cli
+npm install -g nodemon
