@@ -9,5 +9,14 @@ Project setup is done with commands:
 markus@balbinus:~/BYOB$ express
 markus@balbinus:~/BYOB$ npm install
 
-Adding nodemon via npm package manager globally, so that command is available on cli
-npm install -g nodemon
+Adding nodemon via npm package manager globally
+sudo npm install -g nodemon
+
+Adding bower via npm package manager globally
+sudo npm install -g bower
+
+Adding bootstrap via bower package manager
+bower install bootstrap
+
+Setting up bower (automatically adds previous installed packages to the dependency list, in this case bootstrap)
+bower init
