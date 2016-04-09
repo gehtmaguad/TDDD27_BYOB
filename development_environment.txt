@@ -20,3 +20,12 @@ bower install bootstrap
 
 Setting up bower (automatically adds previous installed packages to the dependency list, in this case bootstrap)
 bower init
+
+Installing gulp via npm package manager globally
+npm install -g gulp
+
+Installing gulp via npm package manager locally and add to package.json dev dependencies
+npm install --save-dev gulp
+
+Installing gulp submodules via npm
+sudo npm install gulp-jshint
