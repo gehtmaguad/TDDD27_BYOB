@@ -29,3 +29,19 @@ npm install --save-dev gulp
 
 Installing gulp submodules via npm
 sudo npm install gulp-jshint
+
+Installing heroku toolbelt
+wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+
+Update Node Version from 0.10.x to 5.x.x
+curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+Installing foreman for testing heroku locally
+sudo gem install foreman
+
+Create heroku container from cli
+heroku create
+
+Add a heroku web dyno
+heroku ps:scale web=1
