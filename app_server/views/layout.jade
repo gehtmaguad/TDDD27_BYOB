@@ -6,7 +6,31 @@ html
     link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+
+    // Header with Bootstrap Navigation Bar
+    // http://getbootstrap.com/components/#navbar
+    .navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          a.navbar-brand(href='/') BYOB
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='#navbar-main')
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+        #navbar-main.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a(href='/about/') About
+
+    // Main Content
+    .container
+      block content
+
+      // Footer
+      footer
+        .row
+          .col-xs-12
+            small &copy; BYOB Cooperation
 
   script(src='/bower_components/jquery/dist/jquery.js')
   script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
