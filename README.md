@@ -7,6 +7,7 @@
 ** Preparties can also be created either public (default) or private, with the option to invite/inform other people on the network about it (necessary for private preparty).
 ** There are a lot more ideas to further develop the application with functionality and security, for example:
 ** making the location a bit imprecise until the participator got acknoledged by the hoster, following people, creating a profile with photo and video upload, ...
+
 ## Technical Specification
 * The backend is formed by using NodeJS, ExpressJS and a MongoDB database using Mongoose to enforce a schema.
 * The frontend uses AngularJS and Bootstrap.
