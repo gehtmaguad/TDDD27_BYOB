@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  .row-page-header
+    .col-lg-12
+      h1 Create a preparty!
+  .row
+    .col-xs-12.col-md-6
+      form.form-horizontal(action="/", method="get", role="form")
+
+        .form-group
+          label.col-xs-10.col-sm-2.control-label(for="date") Theme
+          .col-sm-10
+            input#theme.form-control(name="theme")
+
+        .form-group
+          label.col-sm-2.control-label(for="address") Address
+          .col-sm-10
+            textarea#address.form-control(name="address", rows="3")
+
+        .form-group
+          label.col-xs-10.col-sm-2.control-label(for="date") Date
+          .col-sm-10
+            input#date.form-control(name="date")
+
+        .form-group
+          label.col-xs-10.col-sm-2.control-label(for="afterwards") Afterwards
+          .col-sm-10
+            input#afterwards.form-control(name="datafterwardse")
+
+        button.btn.btn-primary.pull-right Create preparty

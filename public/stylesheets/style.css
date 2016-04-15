@@ -6,3 +6,26 @@ body {
 a {
   color: #00B7FF;
 }
+
+.comment {
+  padding-bottom: 10px;
+}
+.commentButton {
+  padding: 0px 10px 0px 10px;
+}
+.panel-body.comment-container {
+  padding-top: 0;
+}
+.comment-header {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.commentAuthor {
+  margin: 0 10px;
+}
+.commentTimestamp {
+  color: #777;
+}
+.joinButton {
+  padding: 0px 10px 0px 10px;
+}

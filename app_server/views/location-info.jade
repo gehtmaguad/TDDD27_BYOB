@@ -1,0 +1,89 @@
+extends layout
+
+block content
+  .row.page-header
+    .col-lg-12
+      h1 Just Because Preparty
+
+  .row
+    .col-xs-12.col-md-12
+      .row
+        .col-xs-12.col-sm-4
+
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Address
+            .panel-body
+              p.address  1200 Vienna, Höchststädtplatz 43
+
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Date
+            .panel-body
+              p Thursday: 8pm - 12pm
+
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Afterwards
+            .panel-body
+              p We will go to club U4 in Vienna
+
+          .panel.panel-primary
+            .panel-heading
+              a.btn.btn-default.pull-right.joinButton(href="/location/join/new")
+                span.glyphicon.glyphicon-user
+              h2.panel-title Joining
+            .panel-body
+              .row
+                .well.well-sm.comment-header
+                  span.commentAuthor Markus Hoesel
+              .row
+                .well.well-sm.comment-header
+                  span.commentAuthor Susanne Lucky
+              .row
+                .well.well-sm.comment-header
+                  span.commentAuthor Foo Bar
+
+
+        .col-xs-12.col-sm-8.location-map
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Location map
+            .panel-body
+              img.img-responsive.img-rounded(src="http://maps.googleapis.com/maps/api/staticmap?center=48.210033,16.363449&zoom=17&size=400x350&sensor=false&markers=48.210033,16.363449&scale=2")
+
+          .panel.panel-primary.comment-panel
+            .panel-heading
+              a.btn.btn-default.pull-right.commentButton(href="/location/comment/new")
+                span.glyphicon.glyphicon-pencil
+              h2.panel-title Comments
+
+          .panel-body.comment-container
+            .row
+              .comment
+                .well.well-sm.comment-header
+                  span.commentAuthor Markus Hoesel
+                  small.commentTimestamp 11.4.2016
+                  span.rating.pull-right
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                .col-xs-12
+                  p This is going to be a awesome party!
+            .row
+              .comment
+                .well.well-sm.comment-header
+                  span.commentAuthor Susanne Lucky
+                  small.commentTimestamp 12.4.2016
+                  span.rating.pull-right
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                    span.glyphicon.glyphicon-star
+                .col-xs-12
+                  p That was a really great preparty :)
+
+        .col-xs-12.col-sm-4

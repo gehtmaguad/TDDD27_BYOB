@@ -5,10 +5,15 @@ module.exports.homelist = function(req, res) {
 
 /* GET locatoinInfo page */
 module.exports.locationInfo = function(req, res) {
-  res.render('index', { title: 'Location Info' });
+  res.render('location-info', { title: 'Location Info' });
 };
 
-/* GET addReview page */
-module.exports.addReview = function(req, res) {
-  res.render('index', { title: 'Add Review' });
+/* GET addComment page */
+module.exports.addComment = function(req, res) {
+  res.render('location-comment-form', { title: 'Add Comment' });
+};
+
+/* GET join page */
+module.exports.join = function(req, res) {
+  res.render('location-join-form', { title: 'Join' });
 };
