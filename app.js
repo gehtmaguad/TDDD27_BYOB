@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Include MongoDB database interface
+require('./app_server/models/db');
+
 var routes = require('./app_server/routes/index');
 
 var app = express();

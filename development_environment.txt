@@ -45,3 +45,14 @@ heroku create
 
 Add a heroku web dyno
 heroku ps:scale web=1
+
+Installing mongoose via npm package manager locally
+npm install --save mongoose
+
+Install MongoDB (
+MongoDB does only provide packages for Ubuntu LTS versions on there Homepage,
+Installing MongoDB as described in http://askubuntu.com/questions/617097/mongodb-2-6-does-not-start-on-ubuntu-15-04)
+echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+sudo service mongod start
