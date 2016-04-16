@@ -4,39 +4,27 @@ block content
   #banner.page-header
     .row
       .col-lg-6
-        h1= title
-        small &nbsp;These preparties are coming up!
-        
+        h1= pageHeader.title
+        small &nbsp;#{pageHeader.strapline}
+
   .row
     .col-xs-12.col-sm-8
       .row.list-group
-        .col-xs12.list-group-item
-          h3
-            a(href='/location') Just Because Preparty
-            //small &nbsp;
-            span.badge.pull-right.badge-default 10 are going
-          span.badge.pull-right.badge-default 55 m away
-          p.address 1200 Vienna, Höchststädtplatz 43
-          p
-            span.label.label-success Free Beer
-            &nbsp;
-            span.label.label-success Free Fingerfood
-            &nbsp;
-            span.label.label-primary Bring Whiskey
-            &nbsp;
-        .col-xs12.list-group-item
-          h3
-            a(href='/location') Wine Tasting Preparty
-            //small &nbsp;
-            span.badge.pull-right.badge-default 12 are going
-          span.badge.pull-right.badge-default 250 m away
-          p.address 1220 Vienna, Whereever 4234/AB
-          p
-            span.label.label-success Free Wine
-            &nbsp;
-            span.label.label-success Free Cheese
-            &nbsp;
-            span.label.label-primary Also bring your own wine
-            &nbsp;
+
+        each location in locations
+          .col-xs12.list-group-item
+            h3
+              a(href='/location')= location.theme
+              span.badge.pull-right.badge-default= location.participants
+            span.badge.pull-right.badge-default= location.distance
+            p.address= location.address
+            p
+              each element in location.provided
+                span.label.label-success= element
+                &nbsp;
+              each element in location.bring
+                span.label.label-primary= element
+                &nbsp;
+
     .col-xs-12.col-sm-4
-      p.lead Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu,
+      p.lead= serviceDescription
