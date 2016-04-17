@@ -1,0 +1,56 @@
+// test data inserted to mongodb via cmd
+{
+  theme: 'Just Because Preparty',
+  address: '1200 Vienna, Höchststädtplatz 43',
+  datum: new Date("May 14, 2016"),
+  provided: ['Free Beer', 'Free Fingerfood'],
+  required: ['Bring Whiskey'],
+  participants: ['Markus Hoesel', 'Julia Maier', 'Susanne Test'],
+  coordinates: [48.210033,16.363449],
+  afterwards: 'We will go to club U4 in Vienna',
+  comments: [
+    {
+      author:'Markus Hoesel',
+      text:'This is going to be a awesome party!'
+    },
+    {
+      author:'Julia Maier',
+      text:'I am really looking forward to this :)'
+    }
+  ]
+}
+
+{
+  theme: 'Wine Tasting Preparty',
+  address: '1220 Vienna, Whereever 4234/AB',
+  datum: new Date("May 12, 2016"),
+  provided: ['Free Cheese'],
+  required: ['Bring Wine'],
+  participants: ['Markus Hoesel', 'Julia Maier'],
+  coordinates: [48.110033,16.163449],
+  comments: [
+    {
+      author:'Foo Bar',
+      text:'Another Comment!'
+    },
+    {
+      author:'Bar Bar',
+      text:'Comment2'
+    },
+    {
+      author:'Bar Foo',
+      text:'Yet another comment'
+    }
+  ]
+}
+
+{
+  theme: 'Johnnys Preparty',
+  address: '2700 Wiener Neustadt, Gata 5/B/27',
+  datum: new Date("May 8, 2016"),
+  provided: ['Free Beer'],
+  required: ['Bring Alcohol', 'Bring Snacks'],
+  participants: ['Susanne Test'],
+  coordinates: [47.210033,15.363449],
+  afterwards: 'We will go out at Herrengasse',
+}

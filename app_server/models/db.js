@@ -3,6 +3,9 @@ var mongoose = require( 'mongoose' );
 
 // Connect to mongodb database via mongoose
 var dbUrl = 'mongodb://localhost/BYOB';
+if (process.env.NODE_ENV === 'production') {
+  dbUrl = process.env.MONGODB_URI;
+}
 mongoose.connect(dbUrl);
 
 // Log connetion status
@@ -43,3 +46,6 @@ process.on('SIGTERM', function() {
     process.exit(0);
   });
 });
+
+// Add models
+require('./locations');

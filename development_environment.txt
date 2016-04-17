@@ -56,3 +56,21 @@ echo "deb http://repo.mongodb.org/apt/debian wheezy/mongodb-org/3.0 main" | sudo
 sudo apt-get update
 sudo apt-get install -y mongodb-org
 sudo service mongod start
+
+
+// add MongoLab database via heroku
+markus@balbinus:~/BYOB$ heroku addons:add mongolab
+// check it out (opens webbrowser to mongolab and shows dburl)
+markus@balbinus:~/BYOB$ heroku addons:open mongolab
+// get url via cmd
+heroku config:get MONGODB_URI
+or
+heroku config | grep MONGODB_URI
+// dump content from local database to temp
+mongodump -h localhost:27017 -d BYOB -o ~/tmp/mongodump
+// import temp to remote database
+mongorestore -h ds011331.mlab.com:11331 -d heroku_49dmvtk4 -u heroku_49dmvtk4 -p <<PWD>> ~/tmp/mongodump/BYOB/
+// connect to remote database via mongo shell
+mongo ds011331.mlab.com:11331/heroku_49dmvtk4 -u heroku_49dmvtk4 -p <<PWD>>
+// Start nodemon in production status
+NODE_ENV=production MONGODB_URI=mongodb://heroku_49dmvtk4:<<PWD>>@ds011331.mlab.com:11331/heroku_49dmvtk4 nodemon

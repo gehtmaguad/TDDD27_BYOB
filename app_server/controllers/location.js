@@ -12,7 +12,7 @@ module.exports.homelist = function(req, res) {
         address: '1200 Vienna, Höchststädtplatz 43',
         date: 'Thursday: 8pm - 12pm',
         provided: ['Free Beer', 'Free Fingerfood'],
-        bring: ['Bring Whiskey'],
+        required: ['Bring Whiskey'],
         participants: '10 are going',
         distance: '50m away'
       },
@@ -21,7 +21,7 @@ module.exports.homelist = function(req, res) {
         address: '1220 Vienna, Whereever 4234/AB',
         date: 'Friday: 8pm - 12pm',
         provided: ['Free Cheese'],
-        bring: ['Bring Wine'],
+        required: ['Bring Wine'],
         participants: '12 are going',
         distance: '250m away'
       },
@@ -30,7 +30,7 @@ module.exports.homelist = function(req, res) {
         address: '2700 Wiener Neustadt, Gata 5/B/27',
         date: 'Saturday: 9pm - 2am',
         provided: ['Free Snacks'],
-        bring: ['Bring Alcohol'],
+        required: ['Bring Alcohol'],
         participants: '3 are going',
         distance: '700m away'
       }
@@ -47,7 +47,7 @@ module.exports.homelist = function(req, res) {
    });
 };
 
-/* GET locatoinInfo page */
+/* GET locationInfo page */
 module.exports.locationInfo = function(req, res) {
   res.render('location-info', {
     title: 'BYOB - Join awesome preparties',
@@ -60,7 +60,7 @@ module.exports.locationInfo = function(req, res) {
       address: '1200 Vienna, Höchststädtplatz 43',
       date: 'Thursday: 8pm - 12pm',
       provided: ['Free Beer', 'Free Fingerfood'],
-      bring: ['Bring Whiskey'],
+      required: ['Bring Whiskey'],
       participants: ['Markus Hoesel', 'Julia Maier', 'Susanne Test'],
       distance: '50m away',
       afterwards: 'We will go to club U4 in Vienna',
