@@ -1,6 +1,6 @@
 {
-  "name": "BYOB",
-  "description": "BYOB or \"Bring your own beverage\" is an application which lets people meet and preparty together in order to have a great start into a awesome party night.",
+  "name": "byob",
+  "description": "BYOB is an application which lets people meet and preparty together in order to have a great start into a awesome party night.",
   "main": "index.html",
   "authors": [
     "marho348@ad.liu.se"
