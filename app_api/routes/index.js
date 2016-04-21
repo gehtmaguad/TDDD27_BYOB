@@ -14,7 +14,7 @@ router.get('/locations/:locationid', ctrlLocations.read);
 
 // comments routes
 router.post('/locations/:locationid/comments', ctrlComments.create);
-//router.get('/locations/:locationid/comments/:commentid', ctrlComments.read);
+router.get('/locations/:locationid/comments/:commentid', ctrlComments.read);
 //router.put('/locations/:locationid/comments/:commentid', ctrlComments.update);
 //router.delete('/locations/:locationid/comments/:commentid', ctrlComments.delete);
 
