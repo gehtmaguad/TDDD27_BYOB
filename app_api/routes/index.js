@@ -6,7 +6,7 @@ var ctrlLocations = require('../controllers/locations');
 var ctrlComments = require('../controllers/comments');
 
 // location routes
-//router.get('/locations', ctrlLocations.listByDistance);
+router.get('/locations', ctrlLocations.listByDistance);
 router.post('/locations', ctrlLocations.create);
 router.get('/locations/:locationid', ctrlLocations.read);
 //router.put('/locations/:locationid', ctrlLocations.update);

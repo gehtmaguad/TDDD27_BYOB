@@ -37,7 +37,7 @@ var locationSchema = new mongoose.Schema({
   provided: [String],
   required: [String],
   participants: [String],
-  coordinates: {
+  coords: {
     type: [Number],
     index: '2dsphere'
   },
