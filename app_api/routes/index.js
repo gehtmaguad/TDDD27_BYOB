@@ -9,7 +9,7 @@ var ctrlComments = require('../controllers/comments');
 router.get('/locations', ctrlLocations.listByDistance);
 router.post('/locations', ctrlLocations.create);
 router.get('/locations/:locationid', ctrlLocations.read);
-//router.put('/locations/:locationid', ctrlLocations.update);
+router.put('/locations/:locationid', ctrlLocations.update);
 //router.delete('/locations/:locationid', ctrlLocations.delete);
 
 // comments routes

@@ -99,3 +99,38 @@ module.exports.create = function(req, res) {
     helper.sendJsonResponse(res, 201, location);
   })
 }
+
+// PUT location by ID
+module.exports.update = function (req, res) {
+  location
+    .findById(req.params.locationid)
+    // Exclude comments as they are updated seperately in commentsController
+    .select('-comments')
+    .exec(function(err, doc) {
+      if (!location) {
+        helper.sendJsonResponse(res, 404, {
+          "message": "no location with id " + req.params.locationid
+        });
+        return;
+      } else if (err) {
+        helper.sendJsonResponse(res, 404, err);
+        return;
+      }
+      doc.theme = req.body.theme,
+      doc.address = req.body.address,
+      doc.datum = req.body.datum,
+      doc.coords = [parseFloat(req.body.longitude),
+        parseFloat(req.body.latitude)],
+      doc.participants = req.body.participants,
+      doc.required = req.body.required,
+      doc.provided = req.body.provided
+
+      doc.save(function(err, doc) {
+        if (err) {
+          helper.sendJsonResponse(res, 404, err);
+          return;
+        }
+        helper.sendJsonResponse(res, 200, doc);
+      });
+    });
+};
