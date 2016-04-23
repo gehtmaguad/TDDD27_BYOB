@@ -16,6 +16,6 @@ router.delete('/locations/:locationid', ctrlLocations.delete);
 router.post('/locations/:locationid/comments', ctrlComments.create);
 router.get('/locations/:locationid/comments/:commentid', ctrlComments.read);
 router.put('/locations/:locationid/comments/:commentid', ctrlComments.update);
-//router.delete('/locations/:locationid/comments/:commentid', ctrlComments.delete);
+router.delete('/locations/:locationid/comments/:commentid', ctrlComments.delete);
 
 module.exports = router;

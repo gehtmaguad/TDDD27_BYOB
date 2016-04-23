@@ -145,3 +145,56 @@ module.exports.update = function(req, res) {
     }
   });
 }
+
+// DELETE comment by ID
+module.exports.delete = function(req, res) {
+  // get location ID and comments ID from params
+  var comment;
+  var locationId = req.params.locationid;
+  var commentId = req.params.commentid;
+  if (!locationId || !commentId) {
+    helper.sendJsonResponse(res, 404, {
+      "message": "required parameters are locationID and commentId"
+    });
+    return;
+  }
+  location.findById(locationId)
+  .select('comments')
+  .exec( function(err, doc) {
+    if (err) {
+      helper.sendJsonResponse(res, 400, err);
+      return;
+    }
+    if (!doc) {
+      helper.sendJsonResponse(res, 404, {
+        "message": "no location document with id " + locationId
+      });
+      return;
+    }
+    // Check if location has commennt with id in it
+    if (doc.comments && doc.comments.length > 0) {
+      if (!doc.comments.id(commentId)) {
+        helper.sendJsonResponse(res, 404, {
+          "message": "no comment with id " + commentId
+        });
+        return;
+      }
+      // Remove comment from document
+      doc.comments.id(commentId).remove();
+      doc.save(function(err, doc) {
+        if (err) {
+          helper.sendJsonResponse(res, 404, err);
+          return;
+        }
+        helper.sendJsonResponse(res, 200, {
+          "message": "successfully removed comment with id " + commentId
+        });
+      });
+    } else {
+      helper.sendJsonResponse(res, 404, {
+        "message": "no comment with id " + commentId
+      });
+    }
+
+  });
+}
