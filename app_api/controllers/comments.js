@@ -96,3 +96,52 @@ module.exports.create = function(req, res) {
     });
   });
 };
+
+// PUT comment by ID
+module.exports.update = function(req, res) {
+  // get location ID and comments ID from params
+  var comment;
+  var locationId = req.params.locationid;
+  var commentId = req.params.commentid;
+  if (!locationId || !commentId) {
+    helper.sendJsonResponse(res, 404, {
+      "message": "required parameters are locationID and commentId"
+    });
+    return;
+  }
+  location.findById(locationId)
+  .select('comments')
+  .exec( function(err, doc) {
+    if (err) {
+      helper.sendJsonResponse(res, 400, err);
+      return;
+    }
+    if (!doc) {
+      helper.sendJsonResponse(res, 404, {
+        "message": "no location document with id " + req.params.locationid
+      });
+      return;
+    }
+    // Check if location has commennts in it
+    if (doc.comments && doc.comments.length > 0) {
+      // Try to find a comment by id
+      comment = doc.comments.id(req.params.commentid);
+      // if no comment with that id found return error
+      if (!comment) {
+        helper.sendJsonResponse(res, 404, {
+          "message": "no comment with id " + req.params.commentid
+        });
+        return;
+      }
+      comment.author = req.body.author;
+      comment.text = req.body.text;
+      doc.save(function(err, doc) {
+        if (err) {
+          helper.sendJsonResponse(res, 404, err);
+          return;
+        }
+        helper.sendJsonResponse(res, 200, comment);
+      });
+    }
+  });
+}
