@@ -134,3 +134,18 @@ module.exports.update = function (req, res) {
       });
     });
 };
+
+// DELETE location by ID
+module.exports.delete = function(req, res) {
+  location
+    .findByIdAndRemove(req.params.locationid)
+    .exec(function(err, location) {
+      if (err) {
+        helper.sendJsonResponse(res, 404, err);
+        return;
+      }
+      helper.sendJsonResponse(res, 200, {
+        "message": "successfully removed document with id " + req.params.locationid
+      });
+    });
+}

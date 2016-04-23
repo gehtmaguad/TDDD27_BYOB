@@ -10,7 +10,7 @@ router.get('/locations', ctrlLocations.listByDistance);
 router.post('/locations', ctrlLocations.create);
 router.get('/locations/:locationid', ctrlLocations.read);
 router.put('/locations/:locationid', ctrlLocations.update);
-//router.delete('/locations/:locationid', ctrlLocations.delete);
+router.delete('/locations/:locationid', ctrlLocations.delete);
 
 // comments routes
 router.post('/locations/:locationid/comments', ctrlComments.create);
