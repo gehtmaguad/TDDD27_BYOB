@@ -74,3 +74,6 @@ mongorestore -h ds011331.mlab.com:11331 -d heroku_49dmvtk4 -u heroku_49dmvtk4 -p
 mongo ds011331.mlab.com:11331/heroku_49dmvtk4 -u heroku_49dmvtk4 -p <<PWD>>
 // Start nodemon in production status
 NODE_ENV=production MONGODB_URI=mongodb://heroku_49dmvtk4:<<PWD>>@ds011331.mlab.com:11331/heroku_49dmvtk4 nodemon
+
+Adding request module via npm
+sudo npm install --save requestsudo npm install --save request

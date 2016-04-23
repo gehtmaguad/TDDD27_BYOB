@@ -34,7 +34,7 @@ module.exports.listByDistance = function(req, res) {
   var maxElements = parseInt(req.query.maxElements);
   var distance = parseInt(req.query.distance);
   // Check if parameters are null
-  if (!longitude || !latitude || !maxElements || !distance) {
+  if (!longitude && longitude !==0 || !latitude && latitude !==0 || !maxElements || !distance) {
     helper.sendJsonResponse(res, 404, {
       "message": "required query parameters are longitude, latitude, maxElements, distance in meter"
     });
