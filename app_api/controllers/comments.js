@@ -6,6 +6,7 @@ module.exports.create = function (req, res) {
   helper.sendJsonResponse(res, 200, {"status": "success"});
 };
 
+// GET comment by ID
 module.exports.read = function (req, res) {
   location
     // Find location doucment by id
@@ -51,4 +52,47 @@ module.exports.read = function (req, res) {
 
       helper.sendJsonResponse(res, 200, location);
     });
+};
+
+// POST comment
+module.exports.create = function(req, res) {
+  // get location ID from params
+  var locationId = req.params.locationid;
+  if (!locationId) {
+    helper.sendJsonResponse(res, 404, {
+      "message": "required query parameters are longitude, latitude, maxElements, distance in meter"
+    });
+    return;
+  }
+  // Query location document and select all comments
+  location.findById(locationId)
+  .select('comments')
+  .exec( function(err, doc) {
+    if (err) {
+      helper.sendJsonResponse(res, 400, err);
+      return;
+    }
+    if (!doc) {
+      helper.sendJsonResponse(res, 404, {
+        "message": "no location document with id " + req.params.locationid
+      });
+      return;
+    }
+    //helper.sendJsonResponse(res, 201, doc);
+    // Push a new comment object to the list of comments
+    doc.comments.push({
+      author: req.body.author,
+      text: req.body.text
+    });
+    // save the updated location document
+    doc.save(function(err, doc) {
+      if (err) {
+        helper.sendJsonResponse(res, 404, err);
+        return;
+      }
+      // Return only the recently added comment, not the whole location doc
+      var comment = doc.comments[doc.comments.length -1];
+      helper.sendJsonResponse(res, 201, comment);
+    });
+  });
 };
