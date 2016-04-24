@@ -76,18 +76,8 @@ var convertDistance = function(distance) {
   }
 };
 
-var renderLocationInfo = function(req, res, body) {
-  res.render('location-info', {
-    title: body.theme,
-    pageHeader: {
-      title: body.theme
-    },
-    location: body
-  });
-};
-
-/* GET locationInfo page */
-module.exports.locationInfo = function(req, res) {
+// GET Location Info takes callback function for rendering
+var getLocationInfo = function(req, res, callback) {
   var path = '/api/locations/' + req.params.locationid;
   var options = {
     url: server + path,
@@ -106,21 +96,77 @@ module.exports.locationInfo = function(req, res) {
           ' + body.coords.lng + ',' + body.coords.lat +
           '&zoom=17&size=400x350&sensor=false&markers=\
           ' + body.coords.lng + ',' + body.coords.lat + '&scale=2';
-        console.log(body.mapUrl);
-        renderLocationInfo(req, res, body);
+        callback(req, res, body);
       } else {
         renderError(req, res, body);
       }
     }
   );
+}
+
+var renderLocationInfo = function(req, res, body) {
+  res.render('location-info', {
+    title: body.theme,
+    pageHeader: {
+      title: body.theme
+    },
+    location: body
+  });
 };
 
-/* GET addComment page */
-module.exports.addComment = function(req, res) {
-  res.render('location-comment-form', { title: 'Add Comment' });
+/* GET locationInfo page */
+module.exports.locationInfo = function(req, res) {
+  getLocationInfo(req, res, function(req, res, body) {
+    renderLocationInfo(req, res, body);
+  });
+};
+
+var renderCreateComment = function(req, res, body) {
+  res.render('location-comment-form', {
+    title: 'Comment for ' + body.theme,
+    pageHeader: {title: body.theme}
+  });
+};
+
+/* GET getComment page */
+module.exports.createComment = function(req, res) {
+  getLocationInfo(req, res, function(req, res, body) {
+    renderCreateComment(req, res, body);
+  });
+};
+
+/* POST addComment page */
+module.exports.sendComment = function(req, res) {
+  var locationid = req.params.locationid;
+  var path = '/api/locations/' + locationid + '/comments';
+  var options = {
+    url: server + path,
+    method: "POST",
+    json: {
+      author: req.body.author,
+      text: req.body.text
+    },
+    qs : {
+      longitude: '48.110933',
+      latitude:  '16.163425',
+      distance: '100000',
+      maxElements: '10'
+    }
+  };
+  request(
+    options,
+    function(err, response, body) {
+      // Check status code and if body has entries
+      if (response.statusCode === 201) {
+        res.redirect('/location/' + locationid);
+      } else {
+        renderError(req, res);
+      }
+    }
+  );
 };
 
 /* GET join page */
 module.exports.join = function(req, res) {
-  res.render('location-join-form', { title: 'Join' });
+  res.render('create-form', { title: 'Create' });
 };

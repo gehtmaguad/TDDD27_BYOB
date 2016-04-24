@@ -9,8 +9,11 @@ var ctrlAbout = require('../controllers/about');
 /* GET location pages */
 router.get('/', ctrlLocation.homelist);
 router.get('/location/:locationid', ctrlLocation.locationInfo);
-router.get('/location/comment/new', ctrlLocation.addComment);
+router.get('/location/:locationid/comment/new', ctrlLocation.createComment);
 router.get('/location/join/new', ctrlLocation.join);
+
+/* POST location pages */
+router.post('/location/:locationid/comment/new', ctrlLocation.sendComment);
 
 /* Get create page */
 router.get('/create', ctrlCreate.create);

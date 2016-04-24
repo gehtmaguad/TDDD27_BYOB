@@ -1,14 +1,20 @@
 extends layout
 
 block content
-  .row-page-header
+  .row.page-header
     .col-lg-12
-      h1 Write a comment!
+      h1= pageHeader.title
+
   .row
     .col-xs-12.col-md-6
-      form.form-horizontal(action="/location", method="get", fole="form")
+      // action="" uses the current path
+      form.form-horizontal(action="", method="post", role="form")
         .form-group
-          label.col-sm-2.control-label(for="comment") Comment
+          label.col-sm-2.control-label(for="author") Author
           .col-sm-10
-            textarea#comment.form-control(name="review", rows="3")
+            input#author.form-control(name="author")
+        .form-group
+          label.col-sm-2.control-label(for="text") Comment
+          .col-sm-10
+            textarea#text.form-control(name="text", rows="3")
         button.btn.btn-primary.pull-right Add comment
