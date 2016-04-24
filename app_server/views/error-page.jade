@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .row.page-header
+    .col-lg-12
+      h1= title
+
+      .row
+        .col-xs-12.col-sm-8
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Error Message
+            .panel-body
+              p= text
+
+        .col-xs-12.col-sm-4
+          .panel.panel-primary
+            .panel-heading
+              h2.panel-title Error Code
+            .panel-body
+              p= status

@@ -15,7 +15,7 @@ block content
         each location in locations
           .col-xs12.list-group-item
             h3
-              a(href='/location')= location.theme
+              a(href='/location/#{location._id}')= location.theme
               span.badge.pull-right.badge-default= location.participants
             span.badge.pull-right.badge-default= location.distance
             p.address= location.address

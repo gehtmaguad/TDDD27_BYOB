@@ -1,3 +1,4 @@
+include _mixins
 extends layout
 
 block content
@@ -20,7 +21,8 @@ block content
             .panel-heading
               h2.panel-title Date
             .panel-body
-              p= location.date
+              p
+                +formatDatum(location.datum)
 
           .panel.panel-primary
             .panel-heading
@@ -58,7 +60,8 @@ block content
                 .comment
                   .well.well-sm.comment-header
                     span.commentAuthor= comment.author
-                    small.commentTimestamp= comment.timestamp
+                    small.commentTimestamp.pull-right
+                      +formatDatum(comment.createdOn)
                   .col-xs-12
                     p= comment.text
 

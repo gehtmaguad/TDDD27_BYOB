@@ -1,0 +1,13 @@
+mixin formatDatum(datum)
+  -var datum = new Date(datum);
+  -var monthsAsStrings = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  -var dayAsStrings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  -var day = datum.getDate();
+  -var weekday = dayAsStrings[datum.getDay()];
+  -var month = monthsAsStrings[datum.getMonth()];
+  -var year = datum.getFullYear();
+  -var formattedDate = weekday + '., ' + day + '. ' + month +  ' ' + year;
+  =formattedDate
+
+mixin test()
+  ='test'

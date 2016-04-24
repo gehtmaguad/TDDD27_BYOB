@@ -8,7 +8,7 @@ var ctrlAbout = require('../controllers/about');
 
 /* GET location pages */
 router.get('/', ctrlLocation.homelist);
-router.get('/location', ctrlLocation.locationInfo);
+router.get('/location/:locationid', ctrlLocation.locationInfo);
 router.get('/location/comment/new', ctrlLocation.addComment);
 router.get('/location/join/new', ctrlLocation.join);
 
