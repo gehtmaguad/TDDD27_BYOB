@@ -126,7 +126,8 @@ module.exports.locationInfo = function(req, res) {
 var renderCreateComment = function(req, res, body) {
   res.render('location-comment-form', {
     title: 'Comment for ' + body.theme,
-    pageHeader: {title: body.theme}
+    pageHeader: {title: body.theme},
+    error: req.query.err
   });
 };
 
@@ -156,6 +157,8 @@ module.exports.sendComment = function(req, res) {
       // Check status code and if body has entries
       if (response.statusCode === 201) {
         res.redirect('/location/' + locationid);
+      } else if (response.statusCode === 404 && body.name === "ValidationError") {
+        res.redirect('/location/' + locationid + '/comment/new?err=ValidationError');
       } else {
         renderError(req, res);
       }
@@ -166,7 +169,8 @@ module.exports.sendComment = function(req, res) {
 var renderCreateLocation = function(req, res) {
   res.render('create-form', {
     title: 'Create a Preparty!',
-    pageHeader: {title: 'Create a Preparty'}
+    pageHeader: {title: 'Create a Preparty'},
+    error: req.query.err
   });
 };
 
@@ -181,13 +185,14 @@ module.exports.sendLocation = function(req, res2) {
     var httpAdapter = 'https';
     // optional
     var extra = {
-        apiKey: apikey, // for Mapquest, OpenCage, Google Premier
-        formatter: null         // 'gpx', 'string', ...
+        apiKey: apikey,
+        formatter: null
     };
     var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
     // Using callback
     geocoder.geocode(req.body.address, function(err, res) {
-        console.log(res[0]);
+      console.log(res);
+      if (res[0]) {
         var options = {
           url: server + path,
           method: "POST",
@@ -209,11 +214,15 @@ module.exports.sendLocation = function(req, res2) {
             // Check status code and if body has entries
             if (response.statusCode === 201) {
               res2.redirect('/');
+            } else if (response.statusCode === 404 && body.name === "ValidationError") {
+              res2.redirect('/locationcreate?err=ValidationError');
             } else {
-              renderError(req, res);
+              renderError(req, res2);
             }
           }
         );
+      } else {
+        res2.redirect('/locationcreate?err=AddressError');
+      }
     });
-
 };
