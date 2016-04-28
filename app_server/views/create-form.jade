@@ -3,13 +3,14 @@ extends layout
 block content
   .row-page-header
     .col-lg-12
-      h1 Create a preparty!
+      h1= pageHeader.title
+
   .row
     .col-xs-12.col-md-6
-      form.form-horizontal(action="/", method="get", role="form")
+      form.form-horizontal(action="", method="post", role="form")
 
         .form-group
-          label.col-xs-10.col-sm-2.control-label(for="date") Theme
+          label.col-xs-10.col-sm-2.control-label(for="theme") Theme
           .col-sm-10
             input#theme.form-control(name="theme")
 
@@ -19,9 +20,9 @@ block content
             textarea#address.form-control(name="address", rows="3")
 
         .form-group
-          label.col-xs-10.col-sm-2.control-label(for="date") Date
+          label.col-xs-10.col-sm-2.control-label(for="datum") Date
           .col-sm-10
-            input#date.form-control(name="date")
+            input#datum.form-control(name="datum")
 
         .form-group
           label.col-xs-10.col-sm-2.control-label(for="afterwards") Afterwards

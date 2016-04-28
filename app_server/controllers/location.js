@@ -166,7 +166,43 @@ module.exports.sendComment = function(req, res) {
   );
 };
 
-/* GET join page */
-module.exports.join = function(req, res) {
-  res.render('create-form', { title: 'Create' });
+var renderCreateLocation = function(req, res) {
+  res.render('create-form', {
+    title: 'Create a Preparty!',
+    pageHeader: {title: 'Create a Preparty'}
+  });
+};
+
+module.exports.createLocation = function(req, res) {
+  renderCreateLocation(req, res);
+};
+
+module.exports.sendLocation = function(req, res) {
+    var path = '/api/locations/';
+    var options = {
+      url: server + path,
+      method: "POST",
+      json: {
+        theme: req.body.theme,
+        address: req.body.address,
+        datum: req.body.datum,
+        longitude: '48.110932',
+        latitude: '16.163425',
+        required:'',
+        provided:'',
+        afterwards: req.body.afterwards
+      },
+      qs : { }
+    };
+    request(
+      options,
+      function(err, response, body) {
+        // Check status code and if body has entries
+        if (response.statusCode === 201) {
+          res.redirect('/');
+        } else {
+          renderError(req, res);
+        }
+      }
+    );
 };
