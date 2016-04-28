@@ -75,5 +75,14 @@ mongo ds011331.mlab.com:11331/heroku_49dmvtk4 -u heroku_49dmvtk4 -p <<PWD>>
 // Start nodemon in production status
 NODE_ENV=production MONGODB_URI=mongodb://heroku_49dmvtk4:<<PWD>>@ds011331.mlab.com:11331/heroku_49dmvtk4 nodemon
 
-Adding request module via npm
+// Adding request module via npm
 sudo npm install --save requestsudo npm install --save request
+
+// Installing package node-geocoder via npm
+npm install --save node-geocoder
+
+// In order to use it with Google API Key is required
+// Start nodemon
+API_KEY=<API-KEY> nodemon
+// Start nodemon in production
+NODE_ENV=production MONGODB_URI=mongodb://heroku_49dmvtk4:<<PWD>>@ds011331.mlab.com:11331/heroku_49dmvtk4 API_KEY=<API-KEY> nodemon

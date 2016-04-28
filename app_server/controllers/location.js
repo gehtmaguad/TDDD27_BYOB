@@ -1,4 +1,6 @@
 var request = require('request');
+
+var apikey = dbUrl = process.env.API_KEY;
 var server = 'http://localhost:3000';
 if (process.env.NODE_ENV === 'production') {
   server = 'https://polar-chamber-29775.herokuapp.com';
@@ -44,8 +46,8 @@ module.exports.homelist = function(req, res) {
     qs : {
       longitude: '48.110933',
       latitude:  '16.163425',
-      distance: '100000',
-      maxElements: '10'
+      distance: '10000000',
+      maxElements: '100'
     }
   };
   request(
@@ -89,8 +91,8 @@ var getLocationInfo = function(req, res, callback) {
     function(err, response, body) {
       if (response.statusCode === 200) {
         body.coords = {
-          lng: body.coords[0],
-          lat: body.coords[1]
+          lng: body.coords[1],
+          lat: body.coords[0]
         };
         body.mapUrl = 'http://maps.googleapis.com/maps/api/staticmap?center=\
           ' + body.coords.lng + ',' + body.coords.lat +
@@ -146,12 +148,7 @@ module.exports.sendComment = function(req, res) {
       author: req.body.author,
       text: req.body.text
     },
-    qs : {
-      longitude: '48.110933',
-      latitude:  '16.163425',
-      distance: '100000',
-      maxElements: '10'
-    }
+    qs : { }
   };
   request(
     options,
@@ -177,32 +174,46 @@ module.exports.createLocation = function(req, res) {
   renderCreateLocation(req, res);
 };
 
-module.exports.sendLocation = function(req, res) {
+module.exports.sendLocation = function(req, res2) {
     var path = '/api/locations/';
-    var options = {
-      url: server + path,
-      method: "POST",
-      json: {
-        theme: req.body.theme,
-        address: req.body.address,
-        datum: req.body.datum,
-        longitude: '48.110932',
-        latitude: '16.163425',
-        required:'',
-        provided:'',
-        afterwards: req.body.afterwards
-      },
-      qs : { }
+
+    var geocoderProvider = 'google';
+    var httpAdapter = 'https';
+    // optional
+    var extra = {
+        apiKey: apikey, // for Mapquest, OpenCage, Google Premier
+        formatter: null         // 'gpx', 'string', ...
     };
-    request(
-      options,
-      function(err, response, body) {
-        // Check status code and if body has entries
-        if (response.statusCode === 201) {
-          res.redirect('/');
-        } else {
-          renderError(req, res);
-        }
-      }
-    );
+    var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
+    // Using callback
+    geocoder.geocode(req.body.address, function(err, res) {
+        console.log(res[0]);
+        var options = {
+          url: server + path,
+          method: "POST",
+          json: {
+            theme: req.body.theme,
+            address: req.body.address,
+            datum: req.body.datum,
+            longitude: res[0].longitude,
+            latitude: res[0].latitude,
+            required:'',
+            provided:'',
+            afterwards: req.body.afterwards
+          },
+          qs : { }
+        };
+        request(
+          options,
+          function(err, response, body) {
+            // Check status code and if body has entries
+            if (response.statusCode === 201) {
+              res2.redirect('/');
+            } else {
+              renderError(req, res);
+            }
+          }
+        );
+    });
+
 };
