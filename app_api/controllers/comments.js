@@ -1,56 +1,61 @@
+// load mongoose module
 var mongoose = require('mongoose');
+// load helper module
 var helper = require('./helper');
-var location = mongoose.model('Location');
 
-module.exports.create = function (req, res) {
-  helper.sendJsonResponse(res, 200, {"status": "success"});
-};
+// access mongoose schema instance
+var LocationModel = mongoose.model('Location');
 
 // GET comment by ID
 module.exports.read = function (req, res) {
-  location
-    // Find location doucment by id
+  LocationModel
+    // find location doucment by id
     .findById(req.params.locationid)
-    // Just select the name of the document and all comments in it
-    .select('theme comments')
+    // select _id and comments from the document and ignore other fields
+    .select('_id comments')
+    // execute query with callbacl function
     .exec(function(err, location) {
-      var response, comment;
-      // Check if location document got returned
+      // declare variables
+      var comment;
+      // check if a location document got returned from the query
       if (!location) {
+        // if no location document got returned send 404 not found and return to caller
         helper.sendJsonResponse(res, 404, {
           "message": "no location with id " + req.params.locationid
         });
         return;
-      // Check for errors
+      // check for errors
       } else if (err) {
-        helper.sendJsonResponse(res, 404, err);
+        // if there are errors send 400 bad request and return to caller
+        helper.sendJsonResponse(res, 400, err);
         return;
       }
-      // Check if location has commennts in it
+      // check if location has commennts in it
       if (location.comments && location.comments.length > 0) {
-        // Try to find a comment by id
+        // if the location has comments then try to find a comment by the given id
         comment = location.comments.id(req.params.commentid);
-        // if no comment with that id found return error
+        // if no comment with that id found send 404 not found and return to caller
         if (!comment) {
           helper.sendJsonResponse(res, 404, {
             "message": "no comment with id " + req.params.commentid
           });
-        } else {
-          helper.sendJsonResponse(res, 200, {
-            location : {
-              theme : location.theme,
-              id : req.params.locationid
-            },
-            comment : comment
-          });
+          return;
         }
+        // if no errors, send the requested comment (subdocument)
+        // and _id of the location (main document)
+        // Respond with 200 OK
+        helper.sendJsonResponse(res, 200, {
+          location : {
+            id : req.params.locationid
+          },
+          comment : comment
+        });
+      // if location document does not have subdocuments send 404 not found
       } else {
         helper.sendJsonResponse(res, 404, {
-          "message": "location " + location.theme + "has no comments"
-        })
+          "message": "location " + location.theme + " has no comments"
+        });
       }
-
-      helper.sendJsonResponse(res, 200, location);
     });
 };
 
@@ -58,143 +63,198 @@ module.exports.read = function (req, res) {
 module.exports.create = function(req, res) {
   // get location ID from params
   var locationId = req.params.locationid;
+  // check if locationID variable evaluates to false
   if (!locationId) {
+    // if locationId evaluates to false
+    // send 404 not found and return to caller
     helper.sendJsonResponse(res, 404, {
-      "message": "required query parameters are longitude, latitude, maxElements, distance in meter"
+      "message": "required parameter is locationID"
     });
     return;
   }
-  // Query location document and select all comments
-  location.findById(locationId)
-  .select('comments')
-  .exec( function(err, doc) {
-    if (err) {
-      helper.sendJsonResponse(res, 400, err);
-      return;
-    }
-    if (!doc) {
-      helper.sendJsonResponse(res, 404, {
-        "message": "no location document with id " + req.params.locationid
-      });
-      return;
-    }
-    //helper.sendJsonResponse(res, 201, doc);
-    // Push a new comment object to the list of comments
-    doc.comments.push({
-      author: req.body.author,
-      text: req.body.text
-    });
-    // save the updated location document
-    doc.save(function(err, doc) {
-      if (err) {
-        helper.sendJsonResponse(res, 404, err);
+
+  LocationModel
+    // find location document by id
+    .findById(locationId)
+    // select all comments from the document and ignore other fields
+    .select('comments')
+    // execute query with callback function
+    .exec( function(err, doc) {
+      // check if a location document got returned from the query
+      if (!doc) {
+        // if no location document got returned send 404 not found and return to caller
+        helper.sendJsonResponse(res, 404, {
+          "message": "no location with id " + req.params.locationid
+        });
+        return;
+      // check for errors
+      } else if (err) {
+        // if there are errors send 400 bad request and return to caller
+        helper.sendJsonResponse(res, 400, err);
         return;
       }
-      // Return only the recently added comment, not the whole location doc
-      var comment = doc.comments[doc.comments.length -1];
-      helper.sendJsonResponse(res, 201, comment);
+      // Push a new comment object to the list of comments in the location document
+      doc.comments.push({
+        author: req.body.author,
+        text: req.body.text
+      });
+      // save the updated location document
+      doc.save(function(err, doc) {
+        // check for errors
+        if (err) {
+          // if there are errors send 400 bad request and return to caller
+          helper.sendJsonResponse(res, 400, err);
+          return;
+        }
+        // Return only the recently added comment, not the whole location doc
+        // Respond with 201 Created
+        var comment = doc.comments[doc.comments.length -1];
+        helper.sendJsonResponse(res, 201, comment);
+      });
     });
-  });
 };
 
 // PUT comment by ID
 module.exports.update = function(req, res) {
-  // get location ID and comments ID from params
+  // declare variables
   var comment;
+  // get location ID and comments ID from params
   var locationId = req.params.locationid;
   var commentId = req.params.commentid;
+  // check if locationID or commentID variable evaluates to false
   if (!locationId || !commentId) {
+    // if locationId evaluates to false
+    // send 404 not found and return to caller
     helper.sendJsonResponse(res, 404, {
       "message": "required parameters are locationID and commentId"
     });
     return;
   }
-  location.findById(locationId)
-  .select('comments')
-  .exec( function(err, doc) {
-    if (err) {
-      helper.sendJsonResponse(res, 400, err);
-      return;
-    }
-    if (!doc) {
-      helper.sendJsonResponse(res, 404, {
-        "message": "no location document with id " + req.params.locationid
-      });
-      return;
-    }
-    // Check if location has commennts in it
-    if (doc.comments && doc.comments.length > 0) {
-      // Try to find a comment by id
-      comment = doc.comments.id(req.params.commentid);
-      // if no comment with that id found return error
-      if (!comment) {
+  // query location document
+  LocationModel
+    // find location doucment by id
+    .findById(locationId)
+    // select all comments from the document and ignore other fields
+    .select('comments')
+    // execute query with callback function
+    .exec( function(err, doc) {
+      // check if a location document got returned from the query
+      if (!doc) {
+        // if no location document got returned send 404 not found and return to caller
         helper.sendJsonResponse(res, 404, {
-          "message": "no comment with id " + req.params.commentid
+          "message": "no location with id " + req.params.locationid
         });
         return;
+      // check for errors
+      } else if (err) {
+        // if there are errors send 400 bad request and return to caller
+        helper.sendJsonResponse(res, 400, err);
+        return;
       }
-      comment.author = req.body.author;
-      comment.text = req.body.text;
-      doc.save(function(err, doc) {
-        if (err) {
-          helper.sendJsonResponse(res, 404, err);
+      // Check if location has commennts in it
+      if (doc.comments && doc.comments.length > 0) {
+        // if the location has comments then try to find a comment by the given id
+        comment = location.comments.id(req.params.commentid);
+        // if no comment with that id found send 404 not found and return to caller
+        if (!comment) {
+          helper.sendJsonResponse(res, 404, {
+            "message": "no comment with id " + req.params.commentid
+          });
           return;
         }
-        helper.sendJsonResponse(res, 200, comment);
-      });
-    }
-  });
+        // parse form field from the request object and update comment
+        comment.author = req.body.author;
+        comment.text = req.body.text;
+        // save the updated location document
+        doc.save(function(err, doc) {
+          // check for errors
+          if (err) {
+            // if there are errors send 400 bad request and return to caller
+            helper.sendJsonResponse(res, 400, err);
+            return;
+          }
+          // Return only the recently added comment, not the whole location doc
+          // Respond with 200 Ok
+          helper.sendJsonResponse(res, 200, comment);
+        });
+        // if location document does not have subdocuments send 404 not found
+        } else {
+          helper.sendJsonResponse(res, 404, {
+            "message": "location " + location.theme + " has no comments"
+          });
+        }
+
+    });
 }
 
 // DELETE comment by ID
 module.exports.delete = function(req, res) {
-  // get location ID and comments ID from params
+  // declare variables
   var comment;
+  // get location ID and comments ID from params
   var locationId = req.params.locationid;
   var commentId = req.params.commentid;
+  // check if locationID or commentID variable evaluates to false
   if (!locationId || !commentId) {
+    // if locationId evaluates to false
+    // send 404 not found and return to caller
     helper.sendJsonResponse(res, 404, {
       "message": "required parameters are locationID and commentId"
     });
     return;
   }
-  location.findById(locationId)
-  .select('comments')
-  .exec( function(err, doc) {
-    if (err) {
-      helper.sendJsonResponse(res, 400, err);
-      return;
-    }
-    if (!doc) {
-      helper.sendJsonResponse(res, 404, {
-        "message": "no location document with id " + locationId
-      });
-      return;
-    }
-    // Check if location has commennt with id in it
-    if (doc.comments && doc.comments.length > 0) {
-      if (!doc.comments.id(commentId)) {
+  // query location document
+  LocationModel
+    // find location doucment by id
+    .findById(locationId)
+    // select all comments from the document and ignore other fields
+    .select('comments')
+    // execute query with callback function
+    .exec( function(err, doc) {
+      // check if a location document got returned from the query
+      if (!doc) {
+        // if no location document got returned send 404 not found and return to caller
         helper.sendJsonResponse(res, 404, {
-          "message": "no comment with id " + commentId
+          "message": "no location with id " + locationid
         });
         return;
+      // check for errors
+      } else if (err) {
+        // if there are errors send 400 bad request and return to caller
+        helper.sendJsonResponse(res, 400, err);
+        return;
       }
-      // Remove comment from document
-      doc.comments.id(commentId).remove();
-      doc.save(function(err, doc) {
-        if (err) {
-          helper.sendJsonResponse(res, 404, err);
+      // Check if location has commennt with id in it
+      // Check if location has commennts in it
+      if (doc.comments && doc.comments.length > 0) {
+        // if the location has comments then try to find a comment by the given id
+        comment = location.comments.id(commentid);
+        // if no comment with that id found send 404 not found and return to caller
+        if (!comment) {
+          helper.sendJsonResponse(res, 404, {
+            "message": "no comment with id " + commentid
+          });
           return;
         }
-        helper.sendJsonResponse(res, 200, {
-          "message": "successfully removed comment with id " + commentId
+        // Remove comment from document
+        doc.comments.id(commentId).remove();
+        // save the updated location document
+        doc.save(function(err, doc) {
+          // check for errors
+          if (err) {
+            // if there are errors send 400 bad request and return to caller
+            helper.sendJsonResponse(res, 400, err);
+            return;
+          }
+          // Return only the recently added comment, not the whole location doc
+          // Respond with 200 Ok
+          helper.sendJsonResponse(res, 200, comment);
         });
-      });
-    } else {
-      helper.sendJsonResponse(res, 404, {
-        "message": "no comment with id " + commentId
-      });
-    }
-
-  });
+      // if location document does not have subdocuments send 404 not found
+      } else {
+        helper.sendJsonResponse(res, 404, {
+          "message": "location " + location.theme + " has no comments"
+        });
+      }
+    });
 }
