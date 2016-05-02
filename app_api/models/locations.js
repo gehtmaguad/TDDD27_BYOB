@@ -1,7 +1,7 @@
 // Require mongoose
 var mongoose = require('mongoose');
 
-// Define schemas
+// Define comments Schema, which is a subdocument of location schema
 var commentSchema = new mongoose.Schema({
   author: {
     type: String,
@@ -17,6 +17,7 @@ var commentSchema = new mongoose.Schema({
   }
 });
 
+// Define location Schema
 var locationSchema = new mongoose.Schema({
   theme: {
     type: String,

@@ -9,11 +9,11 @@ var LocationModel = mongoose.model('Location');
 // GET comment by ID
 module.exports.read = function (req, res) {
   LocationModel
-    // find location doucment by id
+    // find location document by id
     .findById(req.params.locationid)
     // select _id and comments from the document and ignore other fields
     .select('_id comments')
-    // execute query with callbacl function
+    // execute query with callback function
     .exec(function(err, location) {
       // declare variables
       var comment;
@@ -205,7 +205,7 @@ module.exports.delete = function(req, res) {
   }
   // query location document
   LocationModel
-    // find location doucment by id
+    // find location document by id
     .findById(locationId)
     // select all comments from the document and ignore other fields
     .select('comments')
@@ -224,7 +224,6 @@ module.exports.delete = function(req, res) {
         helper.sendJsonResponse(res, 400, err);
         return;
       }
-      // Check if location has commennt with id in it
       // Check if location has commennts in it
       if (doc.comments && doc.comments.length > 0) {
         // if the location has comments then try to find a comment by the given id
