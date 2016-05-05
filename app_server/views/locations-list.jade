@@ -1,31 +1,39 @@
 extends layout
 
+// inject this file into layout
 block content
-  #banner.page-header
+  div(ng-controller="locationsCtrl")
+  
+    // header banner with info field and filter input
+    #banner.page-header
+      .row
+        .col-xs-12.col-sm-6
+          // info field
+          .alert.alert-info(ng-if="locations") There are {{ filteredLocations.length }} Preparties near you! 
+          .alert.alert-danger(ng-if="error") {{ error }}
+        .col-xs-12.col-sm-6
+          // filter input
+          input(ng-if="locations", type="text", 
+          placeholder='Filter Preparties', 
+          class="form-control input-lg filterPreparties", 
+          ng-model='filterLocations')
+      
+     // location list
     .row
-      .col-lg-6
-        h1= pageHeader.title
-        small &nbsp;#{pageHeader.strapline}
+      // loop through locations with angular directive
+      .col-xs-12.col-md-6(ng-repeat="location in locations | filter : filterLocations as filteredLocations")
+        // for every location create a card with information
+        div.locationCard
+          h3
+            a(href='/location/{{ location._id }}') {{ location.theme }}
+            span.badge.pull-right.badge-default(
+              ng-repeat="participant in location.participants"
+              ) {{ participant }}
+              
+          span.badge.pull-right.badge-default {{ location.distance | filterDistance }}
+          p.address {{ location.address }}
+          p
+            span.label.label-success(ng-repeat="element in location.provided") {{ element }} &nbsp;
+            span.label.label-primary(ng-repeat="element in location.required") {{ element }} &nbsp;
 
-  .row
-    .col-xs-12.col-sm-8
-      .alert.alert-info= count
-      .row.list-group
-
-        each location in locations
-          .col-xs12.list-group-item
-            h3
-              a(href='/location/#{location._id}')= location.theme
-              span.badge.pull-right.badge-default= location.participants
-            span.badge.pull-right.badge-default= location.distance
-            p.address= location.address
-            p
-              each element in location.provided
-                span.label.label-success= element
-                  &nbsp;
-              each element in location.required
-                span.label.label-primary= element
-                  &nbsp;
-
-    .col-xs-12.col-sm-4
-      p.lead= serviceDescription
+    hr
