@@ -66,6 +66,7 @@ module.exports.listByDistance = function(req, res) {
     // Check for errors
     if (err) {
       helper.sendJsonResponse(res, 404, err);
+      return;
     }
     // Loop through results, parse each result and push to locations array
     result.forEach(function(element) {
