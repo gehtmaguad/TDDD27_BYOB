@@ -17,65 +17,17 @@ var renderError = function(req, res) {
 
 var renderLocationList = function(req, res, body) {
   res.render('locations-list', {
-    count: "There are " + body.length + " preparties near your location!",
     title: 'BYOB - Join awesome preparties',
     pageHeader: {
       title: 'BringYourOwnBeverage',
       strapline: 'BYOB lets you join awesome preparties near your place!'
-    },
-    locations: body,
-    serviceDescription: 'Lorem ipsum dolor sit amet, consectetuer adipiscing \
-      elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque \
-      penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec \
-      quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla \
-      consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, \
-      vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis \
-      vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer \
-      tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate \
-      eleifend tellus. Aenean leo ligula, porttitor eu,'
+    }
    });
 };
 
 /* GET home page */
 module.exports.homelist = function(req, res) {
-  var path = '/api/locations';
-  var options = {
-    url: server + path,
-    method: "GET",
-    json: {},
-    qs : {
-      longitude: '48.110933',
-      latitude:  '16.163425',
-      distance: '10000000',
-      maxElements: '100'
-    }
-  };
-  request(
-    options,
-    function(err, response, body) {
-      // Check status code and if body has entries
-      if (response.statusCode === 200) {
-        if (body.length) {
-          // For each entry convert distance
-          body.forEach(function(entry) {
-            entry.distance = convertDistance(entry.distance);
-          });
-        }
-        renderLocationList(req, res, body);
-      } else {
-        renderError(req, res);
-      }
-    }
-  );
-};
-
-var convertDistance = function(distance) {
-  // if >= 1 kilometer
-  if (distance >= 1000) {
-    return parseInt(distance / 1000) + " km";
-  } else {
-    return parseInt(distance) + " m";
-  }
+  renderLocationList(req, res);
 };
 
 // GET Location Info takes callback function for rendering

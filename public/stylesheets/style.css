@@ -7,6 +7,25 @@ a {
   color: #00B7FF;
 }
 
+/* definition for p tags in layout footer */
+p.footer {
+  padding-top: 30px;
+  text-align: center;
+}
+
+/* adjust placeholder text size of input box */
+.filterPreparties {
+  font-size: 15px;
+}
+
+/* design for location elements in location list */
+div.locationCard {
+  height: 150px;
+  margin: 0 0 20px 0;
+  padding: 20px 20px 20px 20px;
+  background-color: #F0F0F0;
+}
+
 .comment {
   padding-bottom: 10px;
 }
