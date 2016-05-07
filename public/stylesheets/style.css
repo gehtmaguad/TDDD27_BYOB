@@ -1,10 +1,6 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
+  /* make padding top because of navigation bar */
+  padding-top: 50px;
 }
 
 /* definition for p tags in layout footer */
@@ -13,38 +9,47 @@ p.footer {
   text-align: center;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
+:hover.changeBackground {
+  background-color: #F0F0F0;
+}
+
 /* adjust placeholder text size of input box */
 .filterPreparties {
   font-size: 15px;
 }
 
-/* design for location elements in location list */
-div.locationCard {
-  height: 150px;
-  margin: 0 0 20px 0;
-  padding: 20px 20px 20px 20px;
+/* design for content areas */
+div.contentArea {
   background-color: #F0F0F0;
+  padding: 10px 10px 10px 10px;
+  margin: 20px 0 20px 0;
 }
 
-.comment {
-  padding-bottom: 10px;
+/* comments box design */
+.commentBackground {
+  background-color: #FFF;
 }
 .commentButton {
   padding: 0px 10px 0px 10px;
 }
-.panel-body.comment-container {
-  padding-top: 0;
-}
-.comment-header {
-  margin-top: 5px;
-  margin-bottom: 10px;
+.commentHeader {
+  margin: 5px 0 5px 0;
 }
 .commentAuthor {
-  margin: 0 10px;
+  margin: 0 10px 0 0;
 }
 .commentTimestamp {
   color: #777;
 }
+.commentText {
+  padding: 5px 5px 0 5px;
+}
+
+/* join box design */
 .joinButton {
   padding: 0px 10px 0px 10px;
 }

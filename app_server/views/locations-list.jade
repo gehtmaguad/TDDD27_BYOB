@@ -22,18 +22,16 @@ block content
     .row
       // loop through locations with angular directive
       .col-xs-12.col-md-6(ng-repeat="location in locations | filter : filterLocations as filteredLocations")
-        // for every location create a card with information
-        div.locationCard
-          h3
-            a(href='/location/{{ location._id }}') {{ location.theme }}
-            span.badge.pull-right.badge-default(
-              ng-repeat="participant in location.participants"
-              ) {{ participant }}
-              
-          span.badge.pull-right.badge-default {{ location.distance | filterDistance }}
-          p.address {{ location.address }}
-          p
-            span.label.label-success(ng-repeat="element in location.provided") {{ element }} &nbsp;
-            span.label.label-primary(ng-repeat="element in location.required") {{ element }} &nbsp;
-
+        // for every location create a panel with information            
+        a(href='/location/{{ location._id }}')      
+          .panel.panel-primary.changeBackground
+            .panel-heading
+              h2.panel-title {{ location.theme }}
+            .panel-body.side_nav
+              span.badge.pull-right.badge-default {{ location.distance | filterDistance }}
+              p.address {{ location.address }}
+              span.badge.pull-right.badge-default {{ location.participants.length }} people joining
+              p
+                span.label.label-success(ng-repeat="element in location.provided") {{ element }} &nbsp;
+                span.label.label-primary(ng-repeat="element in location.required") {{ element }}     
     hr

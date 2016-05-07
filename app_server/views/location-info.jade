@@ -1,68 +1,71 @@
 include _mixins
 extends layout
 
+// inject this file into layout
 block content
-  .row.page-header
-    .col-lg-12
-      h1= pageHeader.title
 
-  .row
-    .col-xs-12.col-md-12
-      .row
-        .col-xs-12.col-sm-4
+  .contentArea
+    .row
+      .col-xs-12.col-sm-6
 
-          .panel.panel-primary
-            .panel-heading
-              h2.panel-title Address
-            .panel-body
-              p= location.address
+        .panel.panel-primary
+          .panel-heading
+            h2.panel-title Location map
+          .panel-body
+            img.img-responsive(src=location.mapUrl)
 
-          .panel.panel-primary
-            .panel-heading
-              h2.panel-title Date
-            .panel-body
-              p
-                +formatDatum(location.datum)
+      .col-xs-12.col-sm-6
+      
+        .panel.panel-primary
+          .panel-heading
+            h2.panel-title Theme
+          .panel-body
+            p= location.theme
+        
+        .panel.panel-primary
+          .panel-heading
+            h2.panel-title Date
+          .panel-body
+            p
+              +formatDatum(location.datum)          
+                              
+        .panel.panel-primary
+          .panel-heading
+            h2.panel-title Address
+          .panel-body
+            p= location.address
 
-          .panel.panel-primary
-            .panel-heading
-              h2.panel-title Afterwards
-            .panel-body
-              p= location.afterwards
-
-          .panel.panel-primary
-            .panel-heading
-              a.btn.btn-default.pull-right.joinButton(href="#")
-                span.glyphicon.glyphicon-user
-              h2.panel-title Joining
-            .panel-body
-              for participant in location.participants
-                .row
-                  .well.well-sm.comment-header
-                    span.participant= participant
-
-        .col-xs-12.col-sm-8.location-map
-          .panel.panel-primary
-            .panel-heading
-              h2.panel-title Location map
-            .panel-body
-              img.img-responsive.img-rounded(src=location.mapUrl)
-
-          .panel.panel-primary.comment-panel
-            .panel-heading
-              a.btn.btn-default.pull-right.commentButton(href="/location/#{location._id}/comment/new")
-                span.glyphicon.glyphicon-pencil
-              h2.panel-title Comments
-
-          .panel-body.comment-container
+        .panel.panel-primary
+          .panel-heading
+            h2.panel-title Afterwards
+          .panel-body
+            p= location.afterwards
+  
+  .contentArea          
+    .row
+      .col-xs-12.col-sm-8
+               
+        .panel.panel-primary.comment-panel
+          .panel-heading
+            a.btn.btn-default.pull-right.commentButton(href="/location/#{location._id}/comment/new")
+              span.glyphicon.glyphicon-pencil
+            h2.panel-title Comments
+          .panel-body.commentBackground
             for comment in location.comments
+              .well.well-sm.commentHeader
+                span.commentAuthor= comment.author
+                small.commentTimestamp.pull-right
+                  +formatDatum(comment.createdOn)
+                p.commentText= comment.text
+                  
+      .col-xs-12.col-sm-4
+        .panel.panel-primary
+          .panel-heading
+            a.btn.btn-default.pull-right.joinButton(href="#")
+              span.glyphicon.glyphicon-user
+            h2.panel-title Joining
+          .panel-body
+            for participant in location.participants
               .row
-                .comment
-                  .well.well-sm.comment-header
-                    span.commentAuthor= comment.author
-                    small.commentTimestamp.pull-right
-                      +formatDatum(comment.createdOn)
-                  .col-xs-12
-                    p= comment.text
-
-        .col-xs-12.col-sm-4
+                .well.well-sm.comment-header
+                  span.participant= participant
