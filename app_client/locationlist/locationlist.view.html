@@ -1,0 +1,55 @@
+<!-- angularjs view template for location listing -->
+
+<!-- header banner with info field and filter input field -->
+<div id="banner" class="page-header">
+  <div class="row">
+    <!-- info field -->
+    <div class="col-xs-12 col-sm-6">
+      <div ng-if="vm.locations" class="alert alert-info">
+        <!-- filteredLocations refers to filtered location definition defined in filter expression -->
+        There are {{ filteredLocations.length }} Preparties near you!
+      </div>
+      <div ng-if="vm.error" class="alert alert-danger">
+        {{ vm.error }}
+      </div>
+    </div>
+    <!-- filter input field -->
+    <div class="col-xs-12 col-sm-6">
+      <input type="text" placeholder="Filter Preparties" ng-model="filterLocations" class="form-control input-lg filterPreparties">
+    </div>
+  </div>
+</div>
+
+<!-- location list -->
+<div class="row">
+  <!-- ng-repeat directive and filter expression -->
+  <!-- loop through locations with angular directive and applies filter defined in filter input field -->
+  <div ng-repeat="location in vm.locations | filter : filterLocations as filteredLocations" class="col-xs-12 col-md-6">
+    <!-- for every location create a panel with information -->
+    <a href="/location/{{ location._id }}">
+      <div class="panel panel-primary changeBackground">
+        <div class="panel-heading">
+          <h2 class="panel-title">{{ location.theme }}</h2>
+        </div>
+        <div class="panel-body side_nav">
+          <span class="badge pull-right badge-default">
+            {{ location.distance | filterDistance }}
+          </span>
+          <p class="address">{{ location.address }}</p>
+          <span class="badge pull-right badge-default">
+            {{ location.participants.length }} people joining
+          </span>
+          <p>
+            <span ng-repeat="element in location.provided" class="label label-success">
+              {{ element }} &nbsp;
+            </span>
+            <span ng-repeat="element in location.required" class="label label-primary">
+              {{ element }}
+            </span>
+          </p>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+<hr>

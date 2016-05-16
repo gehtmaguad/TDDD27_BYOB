@@ -23,7 +23,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+
+// static folders which contain files delivered directly to the browser
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app_client')));
 
 app.use('/', routes);
 app.use('/api', routesApi);

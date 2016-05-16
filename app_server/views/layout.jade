@@ -32,15 +32,22 @@ html(ng-app='byobApp')
                 
     section
       .container
-        block content
+        div(ng-view)
+          block content
 
     footer
       p.footer This project is available on <a href='https://github.com/hoeselm/TDDD27_BYOB'>Github</a> 
 
     // javascript files
-    // angular.js files
+    // angular.js library
     script(src='/bower_components/angular/angular.js')
-    script(src='/bower_components/angular/byobApp.js')
+    script(src='/bower_components/angular-route/angular-route.js')
+    // custom angularjs files
+    script(src='/byob_angular.js')
+    script(src='/locationlist/locationlist.controller.js')
+    script(src='/shared/coordinates.service.js')
+    script(src='/shared/location.service.js')
+    script(src='/shared/distance.filter.js')   
     // bootstrap.js needs jquery.js
     script(src='/bower_components/jquery/dist/jquery.js')
     script(src='/bower_components/bootstrap/dist/js/bootstrap.js')

@@ -89,3 +89,6 @@ NODE_ENV=production MONGODB_URI=mongodb://heroku_49dmvtk4:<<PWD>>@ds011331.mlab.
 
 // Adding AngularJs via bower package manager
 bower install angular
+
+// Adding AngularJs routing via bower package manager
+bower install angular-route
