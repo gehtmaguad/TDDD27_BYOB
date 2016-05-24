@@ -4,6 +4,7 @@
   // register getLocations service
   angular.module('byobApp').service('getLocations', getLocations);
 
+  getLocations.$inject = ['$http'];
   function getLocations($http) {
     // define inner function with parameters and execute API call
     var getLocationsByCoordinates = function(latitude, longitude,
