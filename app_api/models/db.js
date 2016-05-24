@@ -10,13 +10,13 @@ mongoose.connect(dbUrl);
 
 // Log connetion status
 mongoose.connection.on('connected', function() {
-  console.log('Database connection established to ' + dbUrl)
+  console.log('Database connection established to ' + dbUrl);
 });
 mongoose.connection.on('error', function() {
-  console.log('Error on database connection to ' + dbUrl)
+  console.log('Error on database connection to ' + dbUrl);
 });
 mongoose.connection.on('disconnected', function() {
-  console.log('Database connection ended to ' + dbUrl)
+  console.log('Database connection ended to ' + dbUrl);
 });
 
 // Shutdown function

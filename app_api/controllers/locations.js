@@ -114,8 +114,8 @@ module.exports.create = function(req, res) {
     }
     // Respond with created document and status code 201 Created
     helper.sendJsonResponse(res, 201, location);
-  })
-}
+  });
+};
 
 // PUT location by ID
 module.exports.update = function (req, res) {
@@ -141,14 +141,14 @@ module.exports.update = function (req, res) {
 
       // get fields by parsing request
       // and update the document values
-      doc.theme = req.body.theme,
-      doc.address = req.body.address,
-      doc.datum = req.body.datum,
+      doc.theme = req.body.theme;
+      doc.address = req.body.address;
+      doc.datum = req.body.datum;
       doc.coords = [parseFloat(req.body.longitude),
-        parseFloat(req.body.latitude)],
-      doc.participants = req.body.participants,
-      doc.required = req.body.required,
-      doc.provided = req.body.provided
+        parseFloat(req.body.latitude)];
+      doc.participants = req.body.participants;
+      doc.required = req.body.required;
+      doc.provided = req.body.provided;
 
       // save the updated location document
       doc.save(function(err, doc) {
@@ -182,4 +182,4 @@ module.exports.delete = function(req, res) {
         "message": "successfully removed document with id " + req.params.locationid
       });
     });
-}
+};

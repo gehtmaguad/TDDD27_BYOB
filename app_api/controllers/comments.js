@@ -185,7 +185,7 @@ module.exports.update = function(req, res) {
         }
 
     });
-}
+};
 
 // DELETE comment by ID
 module.exports.delete = function(req, res) {
@@ -256,4 +256,4 @@ module.exports.delete = function(req, res) {
         });
       }
     });
-}
+};

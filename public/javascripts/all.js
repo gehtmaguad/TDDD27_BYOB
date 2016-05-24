@@ -73,7 +73,7 @@
     getCoordinates.getPosition(vm.successFunc,
       vm.errorFunc, vm.noSupportFunc);
 
-  };
+  }
 
 })();
 
@@ -98,7 +98,7 @@
     };
     // return inner function getPosition
     return { getPosition : getPosition };
-  };
+  }
 
 })();
 
@@ -118,7 +118,7 @@
         return parseInt(distance) + " m";
       }
     };
-  };
+  }
 
 })();
 
@@ -143,6 +143,6 @@
     return {
       getLocationsByCoordinates: getLocationsByCoordinates
     };
-  };
+  }
 
 })();

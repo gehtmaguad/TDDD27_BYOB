@@ -14,6 +14,6 @@
         return parseInt(distance) + " m";
       }
     };
-  };
+  }
 
 })();

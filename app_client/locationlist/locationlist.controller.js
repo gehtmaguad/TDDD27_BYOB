@@ -48,6 +48,6 @@
     getCoordinates.getPosition(vm.successFunc,
       vm.errorFunc, vm.noSupportFunc);
 
-  };
+  }
 
 })();
