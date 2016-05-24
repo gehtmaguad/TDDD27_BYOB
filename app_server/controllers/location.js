@@ -1,6 +1,7 @@
 var request = require('request');
 
-var apikey = dbUrl = process.env.API_KEY;
+var dbUrl = process.env.MONGODB_URI;
+var apikey = process.env.API_KEY;
 var server = 'http://localhost:3000';
 if (process.env.NODE_ENV === 'production') {
   server = 'https://polar-chamber-29775.herokuapp.com';
@@ -46,6 +47,7 @@ var getLocationInfo = function(req, res, callback) {
           lng: body.coords[1],
           lat: body.coords[0]
         };
+        /*jshint multistr: true */
         body.mapUrl = 'http://maps.googleapis.com/maps/api/staticmap?center=\
           ' + body.coords.lng + ',' + body.coords.lat +
           '&zoom=17&size=400x350&sensor=false&markers=\
@@ -56,7 +58,7 @@ var getLocationInfo = function(req, res, callback) {
       }
     }
   );
-}
+};
 
 var renderLocationInfo = function(req, res, body) {
   res.render('location-info', {
