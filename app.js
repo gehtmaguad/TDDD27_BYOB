@@ -8,10 +8,10 @@ var bodyParser = require('body-parser');
 // Include MongoDB database interface
 require('./app_api/models/db');
 
-// Include routes
-var routes = require('./app_server/routes/index');
+// include api routes
 var routesApi = require('./app_api/routes/index');
 
+// create express
 var app = express();
 
 // view engine setup
@@ -28,14 +28,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'app_client')));
 
-app.use('/', routes);
+// use api routes
 app.use('/api', routesApi);
 
-/// catch 404 and forwarding to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+// if request was no api request serve angularjs application
+// angularjs then deals with unknown requests
+app.use(function(req, res) {
+  res.sendfile(path.join(__dirname, 'app_client/home', 'index.html'));
 });
 
 /// error handlers

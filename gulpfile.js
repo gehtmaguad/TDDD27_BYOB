@@ -58,3 +58,4 @@ gulp.task('start', function() {
 
 // Default Task
 gulp.task('default', ['lint', 'scripts', 'watch', 'start']);
+gulp.task('build', ['lint', 'scripts']);

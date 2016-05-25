@@ -125,6 +125,22 @@
 // IIFE (immediately-invoked function expression)
 (function() {
 
+  // register directive
+  angular.module('byobApp').directive('byobFooter', byobFooter);
+
+  // footer directive
+  function byobFooter() {
+    return {
+      restrict: 'EA',
+      templateUrl: '/shared/footer.directive.html'
+    };
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
   // register getLocations service
   angular.module('byobApp').service('getLocations', getLocations);
 
@@ -142,6 +158,22 @@
     // return inner function getLocationsByCoordinates
     return {
       getLocationsByCoordinates: getLocationsByCoordinates
+    };
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register directive
+  angular.module('byobApp').directive('byobNavigation', byobNavigation);
+
+  // footer directive
+  function byobNavigation() {
+    return {
+      restrict: 'EA',
+      templateUrl: '/shared/navigation.directive.html'
     };
   }
 

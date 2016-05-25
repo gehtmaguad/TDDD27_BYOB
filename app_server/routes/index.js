@@ -7,7 +7,7 @@ var ctrlAbout = require('../controllers/about');
 var ctrlInit = require('../controllers/init');
 
 /* get html layout */
-router.get('/', ctrlInit.angularApp);
+//router.get('/', ctrlInit.angularApp);
 
 /* TODO: Delete Urls once angular routing if fully implemented */
 /* GET location pages */

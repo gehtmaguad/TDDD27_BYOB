@@ -1,0 +1,25 @@
+<!-- declare html5 doctype-->
+<!DOCTYPE html>
+<!-- create angularjs application-->
+<html ng-app="byobApp">
+  <head>
+    <!-- define viewport for mobile devices with zoom 1:1-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- title of the application-->
+    <title>Byob</title>
+    <!-- css stylesheets-->
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+  </head>
+  <body ng-view>
+    <!-- javascript files-->
+    <!-- angular.js library-->
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/angular-route/angular-route.js"></script>
+    <!-- custom angularjs files-->
+    <script src="/javascripts/all.min.js"></script>
+    <!-- bootstrap.js needs jquery.js-->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  </body>
+</html>
