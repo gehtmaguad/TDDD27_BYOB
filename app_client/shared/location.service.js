@@ -15,9 +15,15 @@
         '&distance=' + distance +
         '&maxElements=' + maxElements);
     };
+
+    var getLocationDetailById = function (locationid) {
+      return $http.get('/api/locations/' + locationid);
+    };
+
     // return inner function getLocationsByCoordinates
     return {
-      getLocationsByCoordinates: getLocationsByCoordinates
+      getLocationsByCoordinates: getLocationsByCoordinates,
+      getLocationDetailById: getLocationDetailById
     };
   }
 

@@ -4,7 +4,99 @@
 
 <div class="container">
 
-  <h1>TEST {{vm.locationid}} {{vm.header}}</h1>
+  <div class="contentArea">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h2 class="panel-title">Location map</h2>
+          </div>
+          <div class="panel-body">
+            <img class="img-responsive" src="{{ vm.location.mapUrl }}"/>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h2 class="panel-title">Theme</h2>
+          </div>
+          <div class="panel-body">
+            <p>{{vm.location.theme}}</p>
+          </div>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h2 class="panel-title">Date</h2>
+          </div>
+          <div class="panel-body">
+            <p>{{vm.location.datum | date:'d MMMM yyyy'}}</p>
+          </div>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h2 class="panel-title">Address</h2>
+          </div>
+          <div class="panel-body">
+            <p>{{vm.location.address}}</p>
+          </div>
+        </div>
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h2 class="panel-title">Afterwards</h2>
+          </div>
+          <div class="panel-body">
+            <p>{{vm.location.afterwards}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contentArea">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8">
+        <div class="panel panel-primary comment-panel">
+          <div class="panel-heading">
+            <a href="/location/{{ vm.location._id }}/comment/new" class="btn btn-default pull-right commentButton">
+              <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+            <h2 class="panel-title">Comments</h2>
+          </div>
+          <div class="panel-body commentBackground">
+            <div ng-repeat="comment in vm.location.comments | orderBy:'createdOn':true">
+              <div class="well well-sm commentHeader">
+                <span class="commentAuthor">{{ comment.author }}</span>
+                <small class="commentTimestamp pull-right">
+                  {{ comment.createdOn | date:'d MMMM yyyy' }}
+                </small>
+                <p class="commentText">{{ comment.text }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-sm-4">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <a href="#" class="btn btn-default pull-right joinButton">
+              <span class="glyphicon glyphicon-user"></span>
+            </a>
+            <h2 class="panel-title">Joining</h2>
+          </div>
+          <div class="panel-body">
+            <div ng-repeat="participant in vm.location.participants">
+              <div class="row">
+                <div class="well well-sm comment-header">
+                  <span class="participant">{{participant}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 
