@@ -10,13 +10,19 @@
     $routeProvider
       // route for index site
       .when('/', {
-        templateUrl: 'locationlist/locationlist.view.html',
+        templateUrl: '/locationlist/locationlist.view.html',
         controller: 'locationlistCtrl',
+        controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
+      })
+      // route for location details site
+      .when('/location/:locationid', {
+        templateUrl: '/locationdetail/locationdetail.view.html',
+        controller: 'locationdetailCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })
       // route for about site
       .when('/about', {
-        templateUrl: 'about/about.view.html',
+        templateUrl: '/about/about.view.html',
         controller: 'aboutCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })

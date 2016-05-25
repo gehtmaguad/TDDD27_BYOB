@@ -10,13 +10,19 @@
     $routeProvider
       // route for index site
       .when('/', {
-        templateUrl: 'locationlist/locationlist.view.html',
+        templateUrl: '/locationlist/locationlist.view.html',
         controller: 'locationlistCtrl',
+        controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
+      })
+      // route for location details site
+      .when('/location/:locationid', {
+        templateUrl: '/locationdetail/locationdetail.view.html',
+        controller: 'locationdetailCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })
       // route for about site
       .when('/about', {
-        templateUrl: 'about/about.view.html',
+        templateUrl: '/about/about.view.html',
         controller: 'aboutCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })
@@ -41,11 +47,36 @@
   angular.module('byobApp').controller('aboutCtrl', aboutCtrl);
 
   function aboutCtrl() {
+    
+    // bind 'this' to vm and use vm to attach variables for more clarity
+    // also 'this' is very context sensitive and could be problematic to use
     var vm = this;
+
+    // variable definitions
     vm.header = 'About';
     vm.content = 'This is the about page with \n\n a description of the service';
   }
 
+
+  })();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register locationlistCtrl
+  angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
+
+  locationdetailCtrl.$inject = ['$routeParams'];
+  function locationdetailCtrl($routeParams) {
+
+    // bind 'this' to vm and use vm to attach variables for more clarity
+    // also 'this' is very context sensitive and could be problematic to use
+    var vm = this;
+
+    // variable definitions
+    vm.locationid = $routeParams.locationid;
+    vm.header = 'Details';
+  }
 
   })();
 

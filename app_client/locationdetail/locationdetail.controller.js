@@ -2,18 +2,18 @@
 (function() {
 
   // register locationlistCtrl
-  angular.module('byobApp').controller('aboutCtrl', aboutCtrl);
+  angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
 
-  function aboutCtrl() {
-    
+  locationdetailCtrl.$inject = ['$routeParams'];
+  function locationdetailCtrl($routeParams) {
+
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
     var vm = this;
 
     // variable definitions
-    vm.header = 'About';
-    vm.content = 'This is the about page with \n\n a description of the service';
+    vm.locationid = $routeParams.locationid;
+    vm.header = 'Details';
   }
-
 
   })();
