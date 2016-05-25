@@ -14,6 +14,12 @@
         controller: 'locationlistCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })
+      // route for about site
+      .when('/about', {
+        templateUrl: 'about/about.view.html',
+        controller: 'aboutCtrl',
+        controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
+      })
       // route for all paths not mentioned before in the config
       .otherwise({redirectTo: '/'});
 

@@ -14,6 +14,12 @@
         controller: 'locationlistCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })
+      // route for about site
+      .when('/about', {
+        templateUrl: 'about/about.view.html',
+        controller: 'aboutCtrl',
+        controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
+      })
       // route for all paths not mentioned before in the config
       .otherwise({redirectTo: '/'});
 
@@ -27,6 +33,21 @@
   angular.module('byobApp').config(['$routeProvider', '$locationProvider', config]);
 
 })();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register locationlistCtrl
+  angular.module('byobApp').controller('aboutCtrl', aboutCtrl);
+
+  function aboutCtrl() {
+    var vm = this;
+    vm.header = 'About';
+    vm.content = 'This is the about page with \n\n a description of the service';
+  }
+
+
+  })();
 
 // IIFE (immediately-invoked function expression)
 (function() {
