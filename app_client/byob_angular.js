@@ -5,7 +5,7 @@
   angular.module('byobApp', ['ngRoute']);
 
   // create config function for angular-route configuration
-  function config($routeProvider) {
+  function config($routeProvider, $locationProvider) {
 
     $routeProvider
       // route for index site
@@ -16,9 +16,14 @@
       })
       // route for all paths not mentioned before in the config
       .otherwise({redirectTo: '/'});
+
+    $locationProvider.html5Mode({
+      enabled: true,
+      requireBase: false
+    });
   }
 
   // call angular-route configuration
-  angular.module('byobApp').config(['$routeProvider', config]);
+  angular.module('byobApp').config(['$routeProvider', '$locationProvider', config]);
 
 })();
