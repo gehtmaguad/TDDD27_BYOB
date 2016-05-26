@@ -90,7 +90,7 @@
       });
 
     vm.commentModal = function () {
-      alert("Let's add a review!");
+      alert("clickhandler");
     };
   }
 
