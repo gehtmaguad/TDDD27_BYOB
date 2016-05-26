@@ -2,7 +2,7 @@
 (function() {
 
   // angular module definition and inject angular-route module dependency
-  angular.module('byobApp', ['ngRoute']);
+  angular.module('byobApp', ['ngRoute', 'ui.bootstrap']);
 
   // create config function for angular-route configuration
   function config($routeProvider, $locationProvider) {

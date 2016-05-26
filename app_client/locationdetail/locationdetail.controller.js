@@ -4,8 +4,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
 
-  locationdetailCtrl.$inject = ['$routeParams', 'getLocations'];
-  function locationdetailCtrl($routeParams, getLocations) {
+  locationdetailCtrl.$inject = ['$routeParams', '$modal', 'getLocations'];
+  function locationdetailCtrl($routeParams, $modal, getLocations) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use

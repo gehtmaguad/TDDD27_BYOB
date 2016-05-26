@@ -95,3 +95,6 @@ bower install angular-route
 
 // Adding gulp nodemon npm package to use nodemon from gulp
 npm install --save-dev gulp-nodemon
+
+// Adding angular ui-bootstrap via bower package manager
+bower install angular-bootstrap
