@@ -56,6 +56,17 @@ gulp.task('start', function() {
   })
 })
 
+gulp.task('nodemondev', function() {
+  nodemon({
+    env: {
+      'NODE_ENV': 'development',
+      'API_KEY': 'AIzaSyCUy8YzvCFHzc8SMvykFhP6WGcMJLZwR-k'
+      }
+  })
+})
+
+
 // Default Task
 gulp.task('default', ['lint', 'scripts', 'watch', 'start']);
+gulp.task('dev', ['lint', 'scripts', 'watch', 'nodemondev']);
 gulp.task('build', ['lint', 'scripts']);

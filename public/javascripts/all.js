@@ -2,7 +2,7 @@
 (function() {
 
   // angular module definition and inject angular-route module dependency
-  angular.module('byobApp', ['ngRoute']);
+  angular.module('byobApp', ['ngRoute', 'ui.bootstrap']);
 
   // create config function for angular-route configuration
   function config($routeProvider, $locationProvider) {
@@ -66,8 +66,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
 
-  locationdetailCtrl.$inject = ['$routeParams', 'getLocations'];
-  function locationdetailCtrl($routeParams, getLocations) {
+  locationdetailCtrl.$inject = ['$routeParams', '$uibModal', 'getLocations'];
+  function locationdetailCtrl($routeParams, $uibModal, getLocations) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -88,6 +88,10 @@
         vm.error = "Sorry, an error occurred. Please try again later!";
         console.log(e);
       });
+
+    vm.commentModal = function () {
+      alert("Let's add a review!");
+    };
   }
 
   })();
