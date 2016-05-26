@@ -28,7 +28,23 @@
       });
 
     vm.commentModal = function () {
-      alert("clickhandler");
+      var uibModalInstance = $uibModal.open({
+        templateUrl: '/commentModal/commentModal.view.html',
+        controller: 'commentModalCtrl as vm',
+        // make id and theme useable in commentModalCtrl through resolve
+        resolve: {
+          locationdata: function() {
+            return {
+              id: vm.location._id,
+              theme: vm.location.theme
+            };
+          }
+        }
+      });
+
+      uibModalInstance.result.then(function(data) {
+        vm.location.comments.push(data);
+      });
     };
   }
 
