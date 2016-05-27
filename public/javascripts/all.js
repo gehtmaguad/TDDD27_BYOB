@@ -226,12 +226,11 @@
     };
 
     vm.deleteComment = function(locationid, commentid) {
-      console.log("called");
       var uibModalInstance = $uibModal.open({
         // open modal using a template and a controller
         templateUrl: '/deleteCommentModal/deleteCommentModal.view.html',
         controller: 'deleteCommentModalCtrl as vm',
-        // make id and theme useable in commentModalCtrl through resolve
+        // make locationid and commentid useable in commentModalCtrl through resolve
         resolve: {
           locationdata: function() {
             return {
@@ -249,6 +248,36 @@
           .filter(function (el) {
             return el._id !== data._id;
         });
+      });
+    };
+
+
+    vm.updateComment = function(comment) {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/updateCommentModal/updateCommentModal.view.html',
+        controller: 'updateCommentModalCtrl as vm',
+        // make id and theme useable in commentModalCtrl through resolve
+        resolve: {
+          locationdata: function() {
+            return {
+              id: vm.location._id,
+              theme: vm.location.theme,
+              comment: comment
+            };
+          }
+        }
+      });
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.location.comments = vm.location.comments
+          .filter(function (el) {
+            return el._id !== data._id;
+        });
+        vm.location.comments.push(data);
+        //console.log(data);
       });
     };
 
@@ -329,10 +358,15 @@
       );
     };
 
+    var updateCommentById = function(locationid, commentid, data) {
+      return $http.put('/api/locations/' + locationid + '/comments/' + commentid, data);
+    };
+
     // return inner function
     return {
       addCommentById: addCommentById,
-      deleteCommentById: deleteCommentById
+      deleteCommentById: deleteCommentById,
+      updateCommentById: updateCommentById
     };
   }
 
@@ -442,6 +476,73 @@
       restrict: 'EA',
       templateUrl: '/shared/navigation.directive.html'
     };
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register controller
+  angular.module('byobApp').controller('updateCommentModalCtrl', updateCommentModalCtrl);
+
+  updateCommentModalCtrl.$inject = ['$uibModalInstance', 'commentService', 'locationdata'];
+  function updateCommentModalCtrl($uibModalInstance, commentService, locationdata) {
+
+    // bind 'this' to vm and use vm to attach variables for more clarity
+    // also 'this' is very context sensitive and could be problematic to use
+    var vm = this;
+
+    // define variables
+    vm.locationdata = locationdata;
+    vm.formdata = {};
+    vm.formdata.author = locationdata.comment.author;
+    vm.formdata.text = locationdata.comment.text;
+
+    // define function to exit modal window
+    vm.modal = {
+      // close method sends data back to the caller
+      close: function(data) {
+        $uibModalInstance.close(data);
+      },
+      // dismiss method exits the modal without sending data back
+      cancel: function() {
+        $uibModalInstance.dismiss('cancel');
+      }
+    };
+
+    // on submit method
+    vm.onSubmit = function() {
+
+      // check if form is filled out
+      vm.formerror = "";
+      if (!vm.formdata.author && !vm.formdata.text) {
+        vm.formerror = "Please fill out fields";
+        return false;
+      } else if(!vm.formdata.author) {
+        vm.formerror = "Please fill out author field";
+        return false;
+      } else if (!vm.formdata.text) {
+        vm.formerror = "Please fill out comment field";
+        return false;
+      }
+
+      // call service
+      commentService.updateCommentById(vm.locationdata.id, vm.locationdata.comment._id, {
+        author: vm.formdata.author,
+        text: vm.formdata.text
+      // if successful close modal window thorough close method
+      // this sends data back to the caller, who can then display the
+      // data which was sent to the database without asking it
+      }).success(function(data) {
+        vm.modal.close(data);
+      // if error fill error variable
+      }).error(function(err) {
+        vm.formerror = "Problem salving comment " + err;
+      });
+      return false;
+    };
+
   }
 
 })();

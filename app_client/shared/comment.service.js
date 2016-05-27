@@ -17,10 +17,15 @@
       );
     };
 
+    var updateCommentById = function(locationid, commentid, data) {
+      return $http.put('/api/locations/' + locationid + '/comments/' + commentid, data);
+    };
+
     // return inner function
     return {
       addCommentById: addCommentById,
-      deleteCommentById: deleteCommentById
+      deleteCommentById: deleteCommentById,
+      updateCommentById: updateCommentById
     };
   }
 

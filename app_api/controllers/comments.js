@@ -154,7 +154,7 @@ module.exports.update = function(req, res) {
       // Check if location has commennts in it
       if (doc.comments && doc.comments.length > 0) {
         // if the location has comments then try to find a comment by the given id
-        comment = location.comments.id(req.params.commentid);
+        comment = doc.comments.id(req.params.commentid);
         // if no comment with that id found send 404 not found and return to caller
         if (!comment) {
           helper.sendJsonResponse(res, 404, {

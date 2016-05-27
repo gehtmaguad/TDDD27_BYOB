@@ -53,12 +53,11 @@
     };
 
     vm.deleteComment = function(locationid, commentid) {
-      console.log("called");
       var uibModalInstance = $uibModal.open({
         // open modal using a template and a controller
         templateUrl: '/deleteCommentModal/deleteCommentModal.view.html',
         controller: 'deleteCommentModalCtrl as vm',
-        // make id and theme useable in commentModalCtrl through resolve
+        // make locationid and commentid useable in commentModalCtrl through resolve
         resolve: {
           locationdata: function() {
             return {
@@ -76,6 +75,36 @@
           .filter(function (el) {
             return el._id !== data._id;
         });
+      });
+    };
+
+
+    vm.updateComment = function(comment) {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/updateCommentModal/updateCommentModal.view.html',
+        controller: 'updateCommentModalCtrl as vm',
+        // make id and theme useable in commentModalCtrl through resolve
+        resolve: {
+          locationdata: function() {
+            return {
+              id: vm.location._id,
+              theme: vm.location.theme,
+              comment: comment
+            };
+          }
+        }
+      });
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.location.comments = vm.location.comments
+          .filter(function (el) {
+            return el._id !== data._id;
+        });
+        vm.location.comments.push(data);
+        //console.log(data);
       });
     };
 

@@ -1,8 +1,8 @@
 <div class="modal-content">
-  <form id="addComment" name="addComment" role="form"
+  <form id="updateComment" name="updateComment" role="form"
     class="form form-horizontal">
     <div class="modal-header">
-  		<h3 class="modal-title">Write a comment for {{vm.locationdata.theme}}</h3>
+  		<h3 class="modal-title">Update comment for {{vm.locationdata.theme}}</h3>
   	</div>
     <div class="modal-body">
       <div role="alert" ng-show="vm.formerror" class="alert alert-danger">
@@ -31,7 +31,7 @@
 			</div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-success" ng-click="vm.onSubmit()">Create</button>
+      <button class="btn btn-success" ng-click="vm.onSubmit()">Update</button>
       <button class="btn btn-warning" ng-click="vm.modal.cancel()">Cancel</button>
     </div>
   </form>

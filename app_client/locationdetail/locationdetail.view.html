@@ -70,10 +70,16 @@
                 <small class="commentTimestamp pull-right">
                   {{ comment.createdOn | date:'d MMMM yyyy' }}
                 </small>
-                <p class="commentText">{{ comment.text }}</p>
-                <a ng-click="vm.deleteComment( vm.location._id, comment._id )" class="btn btn-default pull-right commentButton">
-                  <span class="glyphicon glyphicon-pencil"></span>
-                </a>
+                <br/>
+                <span class="commentText">{{ comment.text }}</span>
+                <div class="pull-right">
+                  <a ng-click="vm.deleteComment( vm.location._id, comment._id )" class="btn btn-default commentButton">
+                    <span class="glyphicon glyphicon-trash"></span>
+                  </a>
+                  <a ng-click="vm.updateComment( comment )" class="btn btn-default commentButton">
+                    <span class="glyphicon glyphicon-cog"></span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
