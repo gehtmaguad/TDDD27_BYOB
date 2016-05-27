@@ -215,7 +215,7 @@ module.exports.delete = function(req, res) {
       if (!doc) {
         // if no location document got returned send 404 not found and return to caller
         helper.sendJsonResponse(res, 404, {
-          "message": "no location with id " + locationid
+          "message": "no location with id " + locationId
         });
         return;
       // check for errors
@@ -227,11 +227,11 @@ module.exports.delete = function(req, res) {
       // Check if location has commennts in it
       if (doc.comments && doc.comments.length > 0) {
         // if the location has comments then try to find a comment by the given id
-        comment = location.comments.id(commentid);
+        comment = doc.comments.id(commentId);
         // if no comment with that id found send 404 not found and return to caller
         if (!comment) {
           helper.sendJsonResponse(res, 404, {
-            "message": "no comment with id " + commentid
+            "message": "no comment with id " + commentId
           });
           return;
         }

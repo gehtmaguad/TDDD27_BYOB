@@ -58,7 +58,7 @@
         <div class="panel panel-primary comment-panel">
           <div class="panel-heading">
             <!-- <a href="/location/{{ vm.location._id }}/comment/new" class="btn btn-default pull-right commentButton"> -->
-            <a ng-click="vm.commentModal()" class="btn btn-default pull-right commentButton">
+            <a ng-click="vm.createCommentModal()" class="btn btn-default pull-right commentButton">
               <span class="glyphicon glyphicon-pencil"></span>
             </a>
             <h2 class="panel-title">Comments</h2>
@@ -71,6 +71,9 @@
                   {{ comment.createdOn | date:'d MMMM yyyy' }}
                 </small>
                 <p class="commentText">{{ comment.text }}</p>
+                <a ng-click="vm.deleteComment( vm.location._id, comment._id )" class="btn btn-default pull-right commentButton">
+                  <span class="glyphicon glyphicon-pencil"></span>
+                </a>
               </div>
             </div>
           </div>
