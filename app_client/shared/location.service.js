@@ -20,10 +20,15 @@
       return $http.get('/api/locations/' + locationid);
     };
 
+    var addLocation = function(data) {
+      return $http.post('/api/locations', data);
+    };
+
     // return inner function getLocationsByCoordinates
     return {
       getLocationsByCoordinates: getLocationsByCoordinates,
-      getLocationDetailById: getLocationDetailById
+      getLocationDetailById: getLocationDetailById,
+      addLocation: addLocation
     };
   }
 

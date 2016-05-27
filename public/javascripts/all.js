@@ -129,6 +129,66 @@
 (function() {
 
   // register controller
+  angular.module('byobApp').controller('createLocationModalCtrl', createLocationModalCtrl);
+
+  createLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations'];
+  function createLocationModalCtrl($uibModalInstance, getLocations) {
+
+    // bind 'this' to vm and use vm to attach variables for more clarity
+    // also 'this' is very context sensitive and could be problematic to use
+    var vm = this;
+
+    // define variables
+    vm.formdata = "";
+
+    // define function to exit modal window
+    vm.modal = {
+      // close method sends data back to the caller
+      close: function(data) {
+        $uibModalInstance.close(data);
+      },
+      // dismiss method exits the modal without sending data back
+      cancel: function() {
+        $uibModalInstance.dismiss('cancel');
+      }
+    };
+
+    // on submit method
+    vm.onSubmit = function() {
+
+      // check if form is filled out
+      vm.formerror = "";
+      if (!vm.formdata.theme || !vm.formdata.address || !vm.formdata.datum) {
+        vm.formerror = "Please fill out fields";
+        return false;
+      }
+
+      // call service
+      getLocations.addLocation({
+        theme: vm.formdata.theme,
+        datum: vm.formdata.datum,
+        address: vm.formdata.address,
+        afterwards: vm.formdata.afterwards
+      // if successful close modal window thorough close method
+      // this sends data back to the caller, who can then display the
+      // data which was sent to the database without asking it
+      }).success(function(data) {
+        vm.modal.close(data);
+      // if error fill error variable
+      }).error(function(err) {
+        vm.formerror = "Problem saving location " + err;
+      });
+      return false;
+    };
+
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register controller
   angular.module('byobApp').controller('deleteCommentModalCtrl', deleteCommentModalCtrl);
 
   deleteCommentModalCtrl.$inject = ['$uibModalInstance', 'commentService', 'locationdata'];
@@ -291,8 +351,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationlistCtrl', locationlistCtrl);
 
-  locationlistCtrl.$inject = ['$scope', 'getLocations', 'getCoordinates'];
-  function locationlistCtrl($scope, getLocations, getCoordinates) {
+  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates'];
+  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -313,6 +373,22 @@
       .error(function(e) {
         vm.error = "Sorry, an error occurred. Please try again later!";
         console.log(e);
+      });
+    };
+
+    // click handler for ng-click in html
+    vm.createLocationModal = function () {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/createLocationModal/createLocationModal.view.html',
+        controller: 'createLocationModalCtrl as vm',
+      });
+
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.locations.push(data);
       });
     };
 
@@ -455,10 +531,15 @@
       return $http.get('/api/locations/' + locationid);
     };
 
+    var addLocation = function(data) {
+      return $http.post('/api/locations', data);
+    };
+
     // return inner function getLocationsByCoordinates
     return {
       getLocationsByCoordinates: getLocationsByCoordinates,
-      getLocationDetailById: getLocationDetailById
+      getLocationDetailById: getLocationDetailById,
+      addLocation: addLocation
     };
   }
 

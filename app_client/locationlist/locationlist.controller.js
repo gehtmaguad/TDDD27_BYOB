@@ -4,8 +4,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationlistCtrl', locationlistCtrl);
 
-  locationlistCtrl.$inject = ['$scope', 'getLocations', 'getCoordinates'];
-  function locationlistCtrl($scope, getLocations, getCoordinates) {
+  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates'];
+  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -26,6 +26,22 @@
       .error(function(e) {
         vm.error = "Sorry, an error occurred. Please try again later!";
         console.log(e);
+      });
+    };
+
+    // click handler for ng-click in html
+    vm.createLocationModal = function () {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/createLocationModal/createLocationModal.view.html',
+        controller: 'createLocationModalCtrl as vm',
+      });
+
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.locations.push(data);
       });
     };
 
