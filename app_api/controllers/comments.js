@@ -5,6 +5,7 @@ var helper = require('./helper');
 
 // access mongoose schema instance
 var LocationModel = mongoose.model('Location');
+var User = mongoose.model('User');
 
 // GET comment by ID
 module.exports.read = function (req, res) {
@@ -61,57 +62,61 @@ module.exports.read = function (req, res) {
 
 // POST comment
 module.exports.create = function(req, res) {
-  // get location ID from params
-  var locationId = req.params.locationid;
-  // check if locationID variable evaluates to false
-  if (!locationId) {
-    // if locationId evaluates to false
-    // send 404 not found and return to caller
-    helper.sendJsonResponse(res, 404, {
-      "message": "required parameter is locationID"
-    });
-    return;
-  }
-
-  LocationModel
-    // find location document by id
-    .findById(locationId)
-    // select all comments from the document and ignore other fields
-    .select('comments')
-    // execute query with callback function
-    .exec( function(err, doc) {
-      // check if a location document got returned from the query
-      if (!doc) {
-        // if no location document got returned send 404 not found and return to caller
-        helper.sendJsonResponse(res, 404, {
-          "message": "no location with id " + req.params.locationid
-        });
-        return;
-      // check for errors
-      } else if (err) {
-        // if there are errors send 400 bad request and return to caller
-        helper.sendJsonResponse(res, 400, err);
-        return;
-      }
-      // Push a new comment object to the list of comments in the location document
-      doc.comments.push({
-        author: req.body.author,
-        text: req.body.text
+  // create comment is wrapped in getAuthor as a callback
+  // in order to use username variable
+  getAuthor(req, res, function(req, res, username) {
+    // get location ID from params
+    var locationId = req.params.locationid;
+    // check if locationID variable evaluates to false
+    if (!locationId) {
+      // if locationId evaluates to false
+      // send 404 not found and return to caller
+      helper.sendJsonResponse(res, 404, {
+        "message": "required parameter is locationID"
       });
-      // save the updated location document
-      doc.save(function(err, doc) {
+      return;
+    }
+
+    LocationModel
+      // find location document by id
+      .findById(locationId)
+      // select all comments from the document and ignore other fields
+      .select('comments')
+      // execute query with callback function
+      .exec( function(err, doc) {
+        // check if a location document got returned from the query
+        if (!doc) {
+          // if no location document got returned send 404 not found and return to caller
+          helper.sendJsonResponse(res, 404, {
+            "message": "no location with id " + req.params.locationid
+          });
+          return;
         // check for errors
-        if (err) {
+        } else if (err) {
           // if there are errors send 400 bad request and return to caller
           helper.sendJsonResponse(res, 400, err);
           return;
         }
-        // Return only the recently added comment, not the whole location doc
-        // Respond with 201 Created
-        var comment = doc.comments[doc.comments.length -1];
-        helper.sendJsonResponse(res, 201, comment);
+        // Push a new comment object to the list of comments in the location document
+        doc.comments.push({
+          author: username,
+          text: req.body.text
+        });
+        // save the updated location document
+        doc.save(function(err, doc) {
+          // check for errors
+          if (err) {
+            // if there are errors send 400 bad request and return to caller
+            helper.sendJsonResponse(res, 400, err);
+            return;
+          }
+          // Return only the recently added comment, not the whole location doc
+          // Respond with 201 Created
+          var comment = doc.comments[doc.comments.length -1];
+          helper.sendJsonResponse(res, 201, comment);
+        });
       });
-    });
+  });
 };
 
 // PUT comment by ID
@@ -256,4 +261,27 @@ module.exports.delete = function(req, res) {
         });
       }
     });
+};
+
+// helper function
+var getAuthor = function(req, res, callback) {
+  // validate payload
+  if (!req.payload || !req.payload.email) {
+    helper.sendJsonResponse(res, 401, {"message": "no user found"});
+  }
+  // find user by given email
+  User.findOne({email:req.payload.email})
+    .exec(function(err, user) {
+      if (err) {
+        // if error send 404 not found
+        helper.sendJsonResponse(res, 404, err);
+        return;
+      } else if (!user) {
+        // if error send 401 not authorized
+        helper.sendJsonResponse(res, 401, {"message": "no user found"});
+      } else {
+        // if successful execute callback
+        callback(req, res, user.username);
+      }
+  });
 };

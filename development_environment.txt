@@ -98,3 +98,13 @@ npm install --save-dev gulp-nodemon
 
 // Adding angular ui-bootstrap via bower package manager
 bower install angular-bootstrap
+
+// Install java web token lib via npm
+sudo npm install express-jwt --save
+
+// Install passport libs via npm
+npm install passport --save
+npm install passport-local --save
+
+// Install express-jwt to use jwt in express middleware
+npm install express-jwt --save

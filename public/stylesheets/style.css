@@ -3,6 +3,10 @@ body {
   padding-top: 50px;
 }
 
+.addPaddingTop {
+  padding-top: 50px;
+}
+
 /* definition for p tags in layout footer */
 p.footer {
   padding-top: 30px;

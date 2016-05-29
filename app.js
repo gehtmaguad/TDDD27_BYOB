@@ -4,9 +4,12 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 
 // Include MongoDB database interface
 require('./app_api/models/db');
+// Include passport strategy
+require('./app_api/config/passport');
 
 // include api routes
 var routesApi = require('./app_api/routes/index');
@@ -21,12 +24,16 @@ app.set('view engine', 'jade');
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+//app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // static folders which contain files delivered directly to the browser
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'app_client')));
+
+// initialize passport with the strategy included
+app.use(passport.initialize());
 
 // use api routes
 app.use('/api', routesApi);
@@ -38,6 +45,14 @@ app.use(function(req, res) {
 });
 
 /// error handlers
+
+// error handler for unauthorized requests
+app.use(function(err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401);
+    res.json({"message": err.name + ": " + err.message});
+  }
+});
 
 // development error handler
 // will print stacktrace

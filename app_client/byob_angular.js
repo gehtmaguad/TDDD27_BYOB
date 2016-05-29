@@ -26,6 +26,18 @@
         controller: 'aboutCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })
+      // route for register
+      .when('/register', {
+        templateUrl: '/auth/register.view.html',
+        controller: 'registerCtrl',
+        controllerAs: 'vm'
+      })
+      // route for login
+      .when('/login', {
+        templateUrl: '/auth/login.view.html',
+        controller: 'loginCtrl',
+        controllerAs: 'vm'
+      })
       // route for all paths not mentioned before in the config
       .otherwise({redirectTo: '/'});
 

@@ -51,7 +51,8 @@ gulp.task('start', function() {
     env: {
       'NODE_ENV': 'production',
       'MONGODB_URI': 'mongodb://heroku_49dmvtk4:h5u702lhm1dcfq5bgb7eno7vko@ds011331.mlab.com:11331/heroku_49dmvtk4',
-      'API_KEY': 'AIzaSyCUy8YzvCFHzc8SMvykFhP6WGcMJLZwR-k'
+      'API_KEY': 'AIzaSyCUy8YzvCFHzc8SMvykFhP6WGcMJLZwR-k',
+      'JWT_SECRET': 'mysecret'
       }
   })
 })
@@ -60,7 +61,8 @@ gulp.task('nodemondev', function() {
   nodemon({
     env: {
       'NODE_ENV': 'development',
-      'API_KEY': 'AIzaSyCUy8YzvCFHzc8SMvykFhP6WGcMJLZwR-k'
+      'API_KEY': 'AIzaSyCUy8YzvCFHzc8SMvykFhP6WGcMJLZwR-k',
+      'JWT_SECRET': 'mysecret'
       }
   })
 })

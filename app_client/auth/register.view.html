@@ -1,0 +1,50 @@
+<byob-navigation></byob-navigation>
+
+<div class="container addPaddingTop">
+
+  <form id="register" name="register" role="form" class="form form-horizontal">
+    <div role="alert" ng-show="vm.formerror" class="alert alert-danger">
+      {{ vm.formerror }}
+    </div>
+
+    <div class="form-group">
+      <div class="input-group input-group-lg">
+        <span class="input-group-addon" id="basic-addon1">
+          <i class="text-muted glyphicon glyphicon-flag"></i>
+        </span>
+        <input type="text" ng-maxlength="100"
+          data-ng-model="vm.formdata.username"
+          id="theme" name="theme" class="form-control"
+          placeholder="Firstname Surname"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group input-group-lg">
+        <span class="input-group-addon" id="basic-addon1">
+          <i class="text-muted glyphicon glyphicon-flag"></i>
+        </span>
+        <input type="email" data-ng-model="vm.formdata.email"
+          id="email" name="email" class="form-control"
+          placeholder="Email Address"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group input-group-lg">
+        <span class="input-group-addon" id="basic-addon1">
+          <i class="text-muted glyphicon glyphicon-flag"></i>
+        </span>
+        <input type="password" data-ng-model="vm.formdata.pwd"
+          id="pwd" name="pwd" class="form-control"
+          placeholder="Password"/>
+      </div>
+    </div>
+
+    <button class="btn btn-success" ng-click="vm.onSubmit()">Create Account</button>
+
+  </form>
+
+</div>
+
+<byob-footer></byob-footer>

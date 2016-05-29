@@ -26,6 +26,18 @@
         controller: 'aboutCtrl',
         controllerAs: 'vm' // use the viewmodel vm instead of $scope in locationlistCtrl
       })
+      // route for register
+      .when('/register', {
+        templateUrl: '/auth/register.view.html',
+        controller: 'registerCtrl',
+        controllerAs: 'vm'
+      })
+      // route for login
+      .when('/login', {
+        templateUrl: '/auth/login.view.html',
+        controller: 'loginCtrl',
+        controllerAs: 'vm'
+      })
       // route for all paths not mentioned before in the config
       .otherwise({redirectTo: '/'});
 
@@ -59,6 +71,89 @@
 
 
   })();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register controller
+  angular.module('byobApp').controller('loginCtrl', loginCtrl);
+
+  loginCtrl.$inject = ['$location', 'authService'];
+  function loginCtrl($location, authService) {
+    var vm = this;
+
+    // define variables
+    vm.formerror = "";
+    vm.formdata = {
+      email: "",
+      pwd: ""
+    };
+    vm.returnpage = '/';
+
+    // on submit method
+    vm.onSubmit = function() {
+
+      // check if form is filled out
+      if (!vm.formdata.email || !vm.formdata.pwd) {
+        vm.formerror = "Please fill out fields";
+        return false;
+      }
+
+      // call service
+      authService.login(vm.formdata)
+        .error(function(err) {
+          vm.formerror = err;
+        })
+        .then(function() {
+          $location.path(vm.returnpage);
+        });
+    };
+
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register controller
+  angular.module('byobApp').controller('registerCtrl', registerCtrl);
+
+  registerCtrl.$inject = ['$location', 'authService'];
+  function registerCtrl($location, authService) {
+    var vm = this;
+
+    // define variables
+    vm.formerror = "";
+    vm.formdata = {
+      username: "",
+      email: "",
+      pwd: ""
+    };
+    vm.returnpage = '/';
+
+    // on submit method
+    vm.onSubmit = function() {
+
+      // check if form is filled out
+      if (!vm.formdata.username || !vm.formdata.email || !vm.formdata.pwd) {
+        vm.formerror = "Please fill out fields";
+        return false;
+      }
+
+      // call service
+      authService.register(vm.formdata)
+        .error(function(err) {
+          vm.formerror = err;
+        })
+        .then(function() {
+          $location.path(vm.returnpage);
+        });
+    };
+
+  }
+
+})();
 
 // IIFE (immediately-invoked function expression)
 (function() {
@@ -419,6 +514,85 @@
 (function() {
 
   // register service
+  angular.module('byobApp').service('authService', authService);
+
+  authService.$inject = ['$window', '$http'];
+  function authService($window, $http) {
+
+    // save token to local storage
+    var setToken = function(token) {
+      $window.localStorage.byobToken = token;
+    };
+
+    // return token from local storage
+    var getToken = function() {
+      return $window.localStorage.byobToken;
+    };
+
+    var login = function(user) {
+      // $http returns promise
+      return $http.post('/api/login', user)
+        // save token when promise returns successful
+        .success(function(data) {
+          setToken(data.token);
+        });
+    };
+
+    // logout by deleting the token
+    logout = function() {
+      $window.localStorage.removeItem('byobToken');
+    };
+
+    var register = function(user) {
+      // $http returns promise
+      return $http.post('/api/register', user)
+        .success(function(data) {
+          // save token when promise returns successful
+          setToken(data.token);
+        });
+    };
+
+    var isLoggedIn = function() {
+      var token = getToken();
+      // check if there exists a token
+      if (!token) {
+        return false;
+      }
+      // extract the expire date from the token
+      var payload = JSON.parse($window.atob(token.split('.')[1]));
+      return payload.exp > Date.now() / 1000;
+    };
+
+    var currentUser = function() {
+      if(!isLoggedIn()) {
+        return false;
+      }
+      var token = getToken();
+      var payload = JSON.parse($window.atob(token.split('.')[1]));
+      return {
+        email: payload.email,
+        username: payload.username
+      };
+    };
+
+    return {
+      setToken: setToken,
+      getToken: getToken,
+      login: login,
+      logout: logout,
+      register: register,
+      isLoggedIn: isLoggedIn,
+      currentUser: currentUser
+    };
+
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register service
   angular.module('byobApp').service('commentService', commentService);
 
   commentService.$inject = ['$http'];
@@ -548,6 +722,30 @@
 // IIFE (immediately-invoked function expression)
 (function() {
 
+  // register controller
+  angular.module('byobApp').controller('navigationCtrl', navigationCtrl);
+
+  navigationCtrl.$inject = ['$location', 'authService'];
+  function navigationCtrl($location, authService) {
+    var vm = this;
+
+    // Check if user is logged in
+    vm.isLoggedIn = authService.isLoggedIn();
+    // Get current user
+    vm.currentUser = authService.currentUser();
+    // define logout
+    vm.logout = function() {
+      authService.logout();
+      vm.isLoggedIn = authService.isLoggedIn();
+    };
+
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
   // register directive
   angular.module('byobApp').directive('byobNavigation', byobNavigation);
 
@@ -555,7 +753,8 @@
   function byobNavigation() {
     return {
       restrict: 'EA',
-      templateUrl: '/shared/navigation.directive.html'
+      templateUrl: '/shared/navigation.directive.html',
+      controller: 'navigationCtrl as navigationvm'
     };
   }
 

@@ -8,7 +8,8 @@
   function byobNavigation() {
     return {
       restrict: 'EA',
-      templateUrl: '/shared/navigation.directive.html'
+      templateUrl: '/shared/navigation.directive.html',
+      controller: 'navigationCtrl as navigationvm'
     };
   }
 

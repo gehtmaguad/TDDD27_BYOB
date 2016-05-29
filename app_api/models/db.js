@@ -49,3 +49,4 @@ process.on('SIGTERM', function() {
 
 // Add models
 require('./locations');
+require('./users');
