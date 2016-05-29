@@ -4,8 +4,8 @@
   // register controller
   angular.module('byobApp').controller('navigationCtrl', navigationCtrl);
 
-  navigationCtrl.$inject = ['$location', 'authService'];
-  function navigationCtrl($location, authService) {
+  navigationCtrl.$inject = ['$location', '$uibModal', 'authService'];
+  function navigationCtrl($location, $uibModal, authService) {
     var vm = this;
 
     // Check if user is logged in
@@ -17,6 +17,9 @@
       authService.logout();
       vm.isLoggedIn = authService.isLoggedIn();
     };
+
+    // TODO: createLocation click handler is in locationlist.controller.js
+    // because it updates the location array
 
   }
 

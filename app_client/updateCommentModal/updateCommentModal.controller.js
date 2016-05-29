@@ -34,20 +34,13 @@
 
       // check if form is filled out
       vm.formerror = "";
-      if (!vm.formdata.author && !vm.formdata.text) {
-        vm.formerror = "Please fill out fields";
-        return false;
-      } else if(!vm.formdata.author) {
-        vm.formerror = "Please fill out author field";
-        return false;
-      } else if (!vm.formdata.text) {
+      if (!vm.formdata.text) {
         vm.formerror = "Please fill out comment field";
         return false;
       }
 
       // call service
       commentService.updateCommentById(vm.locationdata.id, vm.locationdata.comment._id, {
-        author: vm.formdata.author,
         text: vm.formdata.text
       // if successful close modal window thorough close method
       // this sends data back to the caller, who can then display the

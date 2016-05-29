@@ -49,7 +49,7 @@
         vm.modal.close(data);
       // if error fill error variable
       }).error(function(err) {
-        vm.formerror = "Problem saving location " + err;
+        vm.formerror = err;
       });
       return false;
     };

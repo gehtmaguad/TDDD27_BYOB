@@ -121,75 +121,79 @@ module.exports.create = function(req, res) {
 
 // PUT comment by ID
 module.exports.update = function(req, res) {
-  // declare variables
-  var comment;
-  // get location ID and comments ID from params
-  var locationId = req.params.locationid;
-  var commentId = req.params.commentid;
-  // check if locationID or commentID variable evaluates to false
-  if (!locationId || !commentId) {
-    // if locationId evaluates to false
-    // send 404 not found and return to caller
-    helper.sendJsonResponse(res, 404, {
-      "message": "required parameters are locationID and commentId"
-    });
-    return;
-  }
-  // query location document
-  LocationModel
-    // find location doucment by id
-    .findById(locationId)
-    // select all comments from the document and ignore other fields
-    .select('comments')
-    // execute query with callback function
-    .exec( function(err, doc) {
-      // check if a location document got returned from the query
-      if (!doc) {
-        // if no location document got returned send 404 not found and return to caller
-        helper.sendJsonResponse(res, 404, {
-          "message": "no location with id " + req.params.locationid
-        });
-        return;
-      // check for errors
-      } else if (err) {
-        // if there are errors send 400 bad request and return to caller
-        helper.sendJsonResponse(res, 400, err);
-        return;
-      }
-      // Check if location has commennts in it
-      if (doc.comments && doc.comments.length > 0) {
-        // if the location has comments then try to find a comment by the given id
-        comment = doc.comments.id(req.params.commentid);
-        // if no comment with that id found send 404 not found and return to caller
-        if (!comment) {
+  // create comment is wrapped in getAuthor as a callback
+  // in order to use username variable
+  getAuthor(req, res, function(req, res, username) {
+    // declare variables
+    var comment;
+    // get location ID and comments ID from params
+    var locationId = req.params.locationid;
+    var commentId = req.params.commentid;
+    // check if locationID or commentID variable evaluates to false
+    if (!locationId || !commentId) {
+      // if locationId evaluates to false
+      // send 404 not found and return to caller
+      helper.sendJsonResponse(res, 404, {
+        "message": "required parameters are locationID and commentId"
+      });
+      return;
+    }
+    // query location document
+    LocationModel
+      // find location doucment by id
+      .findById(locationId)
+      // select all comments from the document and ignore other fields
+      .select('comments')
+      // execute query with callback function
+      .exec( function(err, doc) {
+        // check if a location document got returned from the query
+        if (!doc) {
+          // if no location document got returned send 404 not found and return to caller
           helper.sendJsonResponse(res, 404, {
-            "message": "no comment with id " + req.params.commentid
+            "message": "no location with id " + req.params.locationid
           });
           return;
+        // check for errors
+        } else if (err) {
+          // if there are errors send 400 bad request and return to caller
+          helper.sendJsonResponse(res, 400, err);
+          return;
         }
-        // parse form field from the request object and update comment
-        comment.author = req.body.author;
-        comment.text = req.body.text;
-        // save the updated location document
-        doc.save(function(err, doc) {
-          // check for errors
-          if (err) {
-            // if there are errors send 400 bad request and return to caller
-            helper.sendJsonResponse(res, 400, err);
+        // Check if location has commennts in it
+        if (doc.comments && doc.comments.length > 0) {
+          // if the location has comments then try to find a comment by the given id
+          comment = doc.comments.id(req.params.commentid);
+          // if no comment with that id found send 404 not found and return to caller
+          if (!comment) {
+            helper.sendJsonResponse(res, 404, {
+              "message": "no comment with id " + req.params.commentid
+            });
             return;
           }
-          // Return only the recently added comment, not the whole location doc
-          // Respond with 200 Ok
-          helper.sendJsonResponse(res, 200, comment);
-        });
-        // if location document does not have subdocuments send 404 not found
-        } else {
-          helper.sendJsonResponse(res, 404, {
-            "message": "location " + location.theme + " has no comments"
+          // parse form field from the request object and update comment
+          comment.author = username;
+          comment.text = req.body.text;
+          // save the updated location document
+          doc.save(function(err, doc) {
+            // check for errors
+            if (err) {
+              // if there are errors send 400 bad request and return to caller
+              helper.sendJsonResponse(res, 400, err);
+              return;
+            }
+            // Return only the recently added comment, not the whole location doc
+            // Respond with 200 Ok
+            helper.sendJsonResponse(res, 200, comment);
           });
-        }
+          // if location document does not have subdocuments send 404 not found
+          } else {
+            helper.sendJsonResponse(res, 404, {
+              "message": "location " + location.theme + " has no comments"
+            });
+          }
 
-    });
+      });
+  });
 };
 
 // DELETE comment by ID

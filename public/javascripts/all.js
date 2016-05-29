@@ -189,20 +189,13 @@
 
       // check if form is filled out
       vm.formerror = "";
-      if (!vm.formdata.author && !vm.formdata.text) {
-        vm.formerror = "Please fill out fields";
-        return false;
-      } else if(!vm.formdata.author) {
-        vm.formerror = "Please fill out author field";
-        return false;
-      } else if (!vm.formdata.text) {
+      if (!vm.formdata.text) {
         vm.formerror = "Please fill out comment field";
         return false;
       }
 
       // call service
       commentService.addCommentById(vm.locationdata.id, {
-        author: vm.formdata.author,
         text: vm.formdata.text
       // if successful close modal window thorough close method
       // this sends data back to the caller, who can then display the
@@ -211,7 +204,7 @@
         vm.modal.close(data);
       // if error fill error variable
       }).error(function(err) {
-        vm.formerror = "Problem salving comment " + err;
+        vm.formerror = err;
       });
       return false;
     };
@@ -271,7 +264,7 @@
         vm.modal.close(data);
       // if error fill error variable
       }).error(function(err) {
-        vm.formerror = "Problem saving location " + err;
+        vm.formerror = err;
       });
       return false;
     };
@@ -332,12 +325,16 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
 
-  locationdetailCtrl.$inject = ['$routeParams', '$uibModal', 'getLocations', 'commentService'];
-  function locationdetailCtrl($routeParams, $uibModal, getLocations, commentService) {
+  locationdetailCtrl.$inject = ['$routeParams', '$uibModal', 'getLocations', 'commentService', 'authService'];
+  function locationdetailCtrl($routeParams, $uibModal, getLocations, commentService, authService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
     var vm = this;
+    // Check if user is logged in
+    vm.isLoggedIn = authService.isLoggedIn();
+    // Get current user
+    vm.currentUser = authService.currentUser();
 
     // get location details by calling service and passing url prameter
     getLocations.getLocationDetailById($routeParams.locationid)
@@ -471,7 +468,6 @@
       });
     };
 
-    // click handler for ng-click in html
     vm.createLocationModal = function () {
       var uibModalInstance = $uibModal.open({
         // open modal using a template and a controller
@@ -485,7 +481,7 @@
       uibModalInstance.result.then(function(data) {
         vm.locations.push(data);
       });
-    };
+    };    
 
     // error callback function
     vm.errorFunc = function(error) {
@@ -595,21 +591,32 @@
   // register service
   angular.module('byobApp').service('commentService', commentService);
 
-  commentService.$inject = ['$http'];
-  function commentService($http) {
+  commentService.$inject = ['$http', 'authService'];
+  function commentService($http, authService) {
     // define inner function with parameters and execute API call
     var addCommentById = function(locationid, data) {
-      return $http.post('/api/locations/' + locationid + '/comments', data);
+      return $http.post('/api/locations/' + locationid + '/comments', data, {
+        headers: {
+          Authorization: 'Bearer ' + authService.getToken()
+        }
+      });
     };
 
     var deleteCommentById = function(locationid, commentid) {
       return $http.delete(
-        '/api/locations/' + locationid + '/comments/' + commentid
-      );
+        '/api/locations/' + locationid + '/comments/' + commentid, {
+          headers: {
+            Authorization: 'Bearer ' + authService.getToken()
+          }
+        });
     };
 
     var updateCommentById = function(locationid, commentid, data) {
-      return $http.put('/api/locations/' + locationid + '/comments/' + commentid, data);
+      return $http.put('/api/locations/' + locationid + '/comments/' + commentid, data, {
+        headers: {
+          Authorization: 'Bearer ' + authService.getToken()
+        }
+      });
     };
 
     // return inner function
@@ -689,8 +696,8 @@
   // register getLocations service
   angular.module('byobApp').service('getLocations', getLocations);
 
-  getLocations.$inject = ['$http'];
-  function getLocations($http) {
+  getLocations.$inject = ['$http', 'authService'];
+  function getLocations($http, authService) {
     // define inner function with parameters and execute API call
     var getLocationsByCoordinates = function(latitude, longitude,
       distance, maxElements) {
@@ -706,7 +713,11 @@
     };
 
     var addLocation = function(data) {
-      return $http.post('/api/locations', data);
+      return $http.post('/api/locations', data, {
+        headers: {
+          Authorization: 'Bearer ' + authService.getToken()
+        }
+      });
     };
 
     // return inner function getLocationsByCoordinates
@@ -725,8 +736,8 @@
   // register controller
   angular.module('byobApp').controller('navigationCtrl', navigationCtrl);
 
-  navigationCtrl.$inject = ['$location', 'authService'];
-  function navigationCtrl($location, authService) {
+  navigationCtrl.$inject = ['$location', '$uibModal', 'authService'];
+  function navigationCtrl($location, $uibModal, authService) {
     var vm = this;
 
     // Check if user is logged in
@@ -738,6 +749,9 @@
       authService.logout();
       vm.isLoggedIn = authService.isLoggedIn();
     };
+
+    // TODO: createLocation click handler is in locationlist.controller.js
+    // because it updates the location array
 
   }
 
@@ -796,20 +810,13 @@
 
       // check if form is filled out
       vm.formerror = "";
-      if (!vm.formdata.author && !vm.formdata.text) {
-        vm.formerror = "Please fill out fields";
-        return false;
-      } else if(!vm.formdata.author) {
-        vm.formerror = "Please fill out author field";
-        return false;
-      } else if (!vm.formdata.text) {
+      if (!vm.formdata.text) {
         vm.formerror = "Please fill out comment field";
         return false;
       }
 
       // call service
       commentService.updateCommentById(vm.locationdata.id, vm.locationdata.comment._id, {
-        author: vm.formdata.author,
         text: vm.formdata.text
       // if successful close modal window thorough close method
       // this sends data back to the caller, who can then display the

@@ -29,7 +29,6 @@
       });
     };
 
-    // click handler for ng-click in html
     vm.createLocationModal = function () {
       var uibModalInstance = $uibModal.open({
         // open modal using a template and a controller
@@ -43,7 +42,7 @@
       uibModalInstance.result.then(function(data) {
         vm.locations.push(data);
       });
-    };
+    };    
 
     // error callback function
     vm.errorFunc = function(error) {
