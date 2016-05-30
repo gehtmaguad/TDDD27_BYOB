@@ -322,6 +322,52 @@
 // IIFE (immediately-invoked function expression)
 (function() {
 
+  // register controller
+  angular.module('byobApp').controller('deleteLocationModalCtrl', deleteLocationModalCtrl);
+
+  deleteLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations', 'locationdata'];
+  function deleteLocationModalCtrl($uibModalInstance, getLocations, locationdata) {
+
+    // bind 'this' to vm and use vm to attach variables for more clarity
+    // also 'this' is very context sensitive and could be problematic to use
+    var vm = this;
+
+    // define variables
+    vm.locationdata = locationdata;
+    vm.formdata = "";
+
+    // define function to exit modal window
+    vm.modal = {
+      // close method sends data back to the caller
+      close: function(data) {
+        $uibModalInstance.close(data);
+      },
+      // dismiss method exits the modal without sending data back
+      cancel: function() {
+        $uibModalInstance.dismiss('cancel');
+      }
+    };
+
+    // on submit method
+    vm.onSubmit = function() {
+      // call service
+      getLocations.deleteLocationById(vm.locationdata.locationid)
+      .success(function(data) {
+        vm.modal.close(data);
+      // if error fill error variable
+      }).error(function(err) {
+        vm.formerror = err;
+      });
+      return false;
+    };
+
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
   // register locationlistCtrl
   angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
 
@@ -443,12 +489,18 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationlistCtrl', locationlistCtrl);
 
-  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates'];
-  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates) {
+  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates', 'authService'];
+  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates, authService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
     var vm = this;
+    // Check if user is logged in
+    vm.isLoggedIn = authService.isLoggedIn();
+    // Get current user
+    vm.currentUser = authService.currentUser();
+    // locations
+    vm.locations = "";
 
     // success callback function
     vm.successFunc = function(currrentPosition) {
@@ -481,7 +533,59 @@
       uibModalInstance.result.then(function(data) {
         vm.locations.push(data);
       });
-    };    
+    };
+
+
+    vm.deleteLocationModal = function(locationid) {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/deleteLocationModal/deleteLocationModal.view.html',
+        controller: 'deleteLocationModalCtrl as vm',
+        // make locationid and commentid useable in commentModalCtrl through resolve
+        resolve: {
+          locationdata: function() {
+            return {
+              locationid: locationid            };
+          }
+        }
+      });
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.locations = vm.locations
+          .filter(function (el) {
+            return el._id !== data._id;
+        });
+      });
+    };
+
+    vm.updateLocationModal = function(location) {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/updateLocationModal/updateLocationModal.view.html',
+        controller: 'updateLocationModalCtrl as vm',
+        // make id and theme useable in commentModalCtrl through resolve
+        resolve: {
+          locationdata: function() {
+            return {
+              location: location
+            };
+          }
+        }
+      });
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.locations = vm.locations
+          .filter(function (el) {
+            return el._id !== data._id;
+        });
+        vm.locations.push(data);
+        //console.log(data);
+      });
+    };
 
     // error callback function
     vm.errorFunc = function(error) {
@@ -720,11 +824,30 @@
       });
     };
 
+    var deleteLocationById = function(locationid) {
+      return $http.delete(
+        '/api/locations/' + locationid, {
+          headers: {
+            Authorization: 'Bearer ' + authService.getToken()
+          }
+        });
+    };
+
+    var updateLocation = function(locationid, data) {
+      return $http.put('/api/locations/' + locationid, data, {
+        headers: {
+          Authorization: 'Bearer ' + authService.getToken()
+        }
+      });
+    };
+
     // return inner function getLocationsByCoordinates
     return {
       getLocationsByCoordinates: getLocationsByCoordinates,
       getLocationDetailById: getLocationDetailById,
-      addLocation: addLocation
+      addLocation: addLocation,
+      deleteLocationById: deleteLocationById,
+      updateLocation: updateLocation
     };
   }
 
@@ -826,6 +949,71 @@
       // if error fill error variable
       }).error(function(err) {
         vm.formerror = "Problem salving comment " + err;
+      });
+      return false;
+    };
+
+  }
+
+})();
+
+// IIFE (immediately-invoked function expression)
+(function() {
+
+  // register controller
+  angular.module('byobApp').controller('updateLocationModalCtrl', updateLocationModalCtrl);
+
+  updateLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations', 'locationdata'];
+  function updateLocationModalCtrl($uibModalInstance, getLocations, locationdata) {
+
+    // bind 'this' to vm and use vm to attach variables for more clarity
+    // also 'this' is very context sensitive and could be problematic to use
+    var vm = this;
+
+    // define variables
+    vm.locationdata = locationdata;
+    vm.formdata = {};
+    vm.formdata.theme = locationdata.location.theme;
+    vm.formdata.address = locationdata.location.address;
+    vm.formdata.datum = locationdata.location.datum;
+    vm.formdata.afterwards = locationdata.location.afterwards;
+
+    // define function to exit modal window
+    vm.modal = {
+      // close method sends data back to the caller
+      close: function(data) {
+        $uibModalInstance.close(data);
+      },
+      // dismiss method exits the modal without sending data back
+      cancel: function() {
+        $uibModalInstance.dismiss('cancel');
+      }
+    };
+
+    // on submit method
+    vm.onSubmit = function() {
+
+      // check if form is filled out
+      vm.formerror = "";
+      if (!vm.formdata.theme || !vm.formdata.address || !vm.formdata.datum) {
+        vm.formerror = "Please fill out fields";
+        return false;
+      }
+
+      // call service
+      getLocations.updateLocation(vm.locationdata.location._id, {
+        theme: vm.formdata.theme,
+        address: vm.formdata.address,
+        datum: vm.formdata.datum,
+        afterwards: vm.formdata.afterwards
+      // if successful close modal window thorough close method
+      // this sends data back to the caller, who can then display the
+      // data which was sent to the database without asking it
+      }).success(function(data) {
+        vm.modal.close(data);
+      // if error fill error variable
+      }).error(function(err) {
+        vm.formerror = err;
       });
       return false;
     };

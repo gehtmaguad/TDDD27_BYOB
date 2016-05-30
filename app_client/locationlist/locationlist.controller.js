@@ -4,12 +4,18 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationlistCtrl', locationlistCtrl);
 
-  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates'];
-  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates) {
+  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates', 'authService'];
+  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates, authService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
     var vm = this;
+    // Check if user is logged in
+    vm.isLoggedIn = authService.isLoggedIn();
+    // Get current user
+    vm.currentUser = authService.currentUser();
+    // locations
+    vm.locations = "";
 
     // success callback function
     vm.successFunc = function(currrentPosition) {
@@ -42,7 +48,59 @@
       uibModalInstance.result.then(function(data) {
         vm.locations.push(data);
       });
-    };    
+    };
+
+
+    vm.deleteLocationModal = function(locationid) {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/deleteLocationModal/deleteLocationModal.view.html',
+        controller: 'deleteLocationModalCtrl as vm',
+        // make locationid and commentid useable in commentModalCtrl through resolve
+        resolve: {
+          locationdata: function() {
+            return {
+              locationid: locationid            };
+          }
+        }
+      });
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.locations = vm.locations
+          .filter(function (el) {
+            return el._id !== data._id;
+        });
+      });
+    };
+
+    vm.updateLocationModal = function(location) {
+      var uibModalInstance = $uibModal.open({
+        // open modal using a template and a controller
+        templateUrl: '/updateLocationModal/updateLocationModal.view.html',
+        controller: 'updateLocationModalCtrl as vm',
+        // make id and theme useable in commentModalCtrl through resolve
+        resolve: {
+          locationdata: function() {
+            return {
+              location: location
+            };
+          }
+        }
+      });
+      // when promise uibModalInstance.result is resolved,
+      // that means the commentModalWindow was closed by close(data) method
+      // use this data and update comment list to show the newly comment
+      uibModalInstance.result.then(function(data) {
+        vm.locations = vm.locations
+          .filter(function (el) {
+            return el._id !== data._id;
+        });
+        vm.locations.push(data);
+        //console.log(data);
+      });
+    };
 
     // error callback function
     vm.errorFunc = function(error) {

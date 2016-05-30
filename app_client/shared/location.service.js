@@ -28,11 +28,30 @@
       });
     };
 
+    var deleteLocationById = function(locationid) {
+      return $http.delete(
+        '/api/locations/' + locationid, {
+          headers: {
+            Authorization: 'Bearer ' + authService.getToken()
+          }
+        });
+    };
+
+    var updateLocation = function(locationid, data) {
+      return $http.put('/api/locations/' + locationid, data, {
+        headers: {
+          Authorization: 'Bearer ' + authService.getToken()
+        }
+      });
+    };
+
     // return inner function getLocationsByCoordinates
     return {
       getLocationsByCoordinates: getLocationsByCoordinates,
       getLocationDetailById: getLocationDetailById,
-      addLocation: addLocation
+      addLocation: addLocation,
+      deleteLocationById: deleteLocationById,
+      updateLocation: updateLocation
     };
   }
 

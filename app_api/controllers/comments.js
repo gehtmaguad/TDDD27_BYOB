@@ -283,6 +283,7 @@ var getAuthor = function(req, res, callback) {
       } else if (!user) {
         // if error send 401 not authorized
         helper.sendJsonResponse(res, 401, {"message": "no user found"});
+        return;
       } else {
         // if successful execute callback
         callback(req, res, user.username);

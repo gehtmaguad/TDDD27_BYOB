@@ -43,10 +43,20 @@
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h2 class="panel-title">Afterwards</h2>
+            <h2 class="panel-title">Hoster</h2>
           </div>
           <div class="panel-body">
-            <p>{{vm.location.afterwards}}</p>
+            <p>{{vm.location.author}}</p>
+          </div>
+        </div>
+        <div ng-show="vm.location.afterwards">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">Afterwards</h2>
+            </div>
+            <div class="panel-body">
+              <p>{{vm.location.afterwards}}</p>
+            </div>
           </div>
         </div>
       </div>

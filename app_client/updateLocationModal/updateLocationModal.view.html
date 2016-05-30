@@ -1,0 +1,61 @@
+<div class="modal-content">
+  <form id="updateComment" name="updateComment" role="form"
+    class="form form-horizontal">
+    <div class="modal-header">
+  		<h3 class="modal-title">Update location</h3>
+  	</div>
+    <div class="modal-body">
+      <div role="alert" ng-show="vm.formerror" class="alert alert-danger">
+        {{vm.formerror}}
+      </div>
+      <div class="form-group">
+				<div class="input-group input-group-lg">
+					<span class="input-group-addon" id="basic-addon1">
+						<i class="text-muted glyphicon glyphicon-flag"></i>
+					</span>
+					<input type="text" ng-maxlength="25"
+            data-ng-model="vm.formdata.theme"
+            id="theme" name="theme" class="form-control"
+            placeholder="Theme"/>
+				</div>
+			</div>
+      <div class="form-group">
+				<div class="input-group input-group-lg">
+					<span class="input-group-addon" id="basic-addon1">
+						<i class="text-muted glyphicon glyphicon-flag"></i>
+					</span>
+					<textarea data-ng-model="vm.formdata.address"
+            id="address" name="address" class="form-control"
+            placeholder="Address" rows="4"></textarea>
+				</div>
+			</div>
+      <div class="form-group">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon" id="basic-addon1">
+            <i class="text-muted glyphicon glyphicon-flag"></i>
+          </span>
+          <input type="text" ng-maxlength="25"
+            data-ng-model="vm.formdata.datum"
+            id="datum" name="datum" class="form-control"
+            placeholder="Date"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon" id="basic-addon1">
+            <i class="text-muted glyphicon glyphicon-flag"></i>
+          </span>
+          <input type="text" ng-maxlength="25"
+            data-ng-model="vm.formdata.afterwards"
+            id="afterwards" name="afterwards" class="form-control"
+            placeholder="Afterwards"/>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success" ng-click="vm.onSubmit()">Update</button>
+      <button class="btn btn-warning" ng-click="vm.modal.cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

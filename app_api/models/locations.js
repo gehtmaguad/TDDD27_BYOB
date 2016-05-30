@@ -19,6 +19,10 @@ var commentSchema = new mongoose.Schema({
 
 // Define location Schema
 var locationSchema = new mongoose.Schema({
+  author: {
+    type: String,
+    required: true
+  },
   theme: {
     type: String,
     required: true

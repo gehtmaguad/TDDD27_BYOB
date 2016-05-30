@@ -1,0 +1,17 @@
+<div class="modal-content">
+  <form id="deleteLocation" name="deleteLocation" role="form"
+    class="form form-horizontal">
+    <div class="modal-header">
+  		<h3 class="modal-title">Are you sure you want delete this location?</h3>
+  	</div>
+    <div class="modal-body" ng-show="vm.formerror">
+      <div role="alert"  class="alert alert-danger">
+        {{vm.formerror}}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" ng-click=vm.onSubmit()>Delete</button>
+      <button class="btn btn-warning" ng-click="vm.modal.cancel()">Cancel</button>
+    </div>
+  </form>
+</div>
