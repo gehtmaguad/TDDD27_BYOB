@@ -180,7 +180,7 @@ module.exports.update = function (req, res) {
           doc.address = req.body.address;
           doc.datum = req.body.datum;
           doc.coords = [parseFloat(resi[0].longitude),
-            parseFloat(resi[0].latitude)],
+            parseFloat(resi[0].latitude)];
           doc.participants = req.body.participants;
           doc.required = req.body.required;
           doc.provided = req.body.provided;

@@ -17,10 +17,6 @@
       authService.logout();
       vm.isLoggedIn = authService.isLoggedIn();
     };
-
-    // TODO: createLocation click handler is in locationlist.controller.js
-    // because it updates the location array
-
   }
 
 })();
