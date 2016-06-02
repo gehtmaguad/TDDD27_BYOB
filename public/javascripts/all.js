@@ -502,24 +502,6 @@
     // locations
     vm.locations = "";
 
-    // success callback function
-    vm.successFunc = function(currrentPosition) {
-
-      // get current position coordinates from browser
-      var latitude = currrentPosition.coords.latitude;
-      var longitude = currrentPosition.coords.longitude;
-
-      // call service locationService in order to retrieve database entries
-      locationService.getLocationsByCoordinates(latitude, longitude, 100000, 10)
-      .success(function(locations) {
-        vm.locations = locations;
-      })
-      .error(function(e) {
-        vm.error = "Sorry, an error occurred. Please try again later!";
-        console.log(e);
-      });
-    };
-
     vm.createLocationModal = function () {
       var uibModalInstance = $uibModal.open({
         // open modal using a template and a controller
@@ -583,7 +565,6 @@
             return el._id !== data._id;
         });
         vm.locations.push(data);
-        //console.log(data);
       });
     };
 
@@ -598,6 +579,23 @@
     vm.noSupportFunc = function() {
       $scope.$apply(function() {
         vm.error = "Geolocation not supported by this browser";
+      });
+    };
+
+    // success callback function
+    vm.successFunc = function(currrentPosition) {
+
+      // get current position coordinates from browser
+      var latitude = currrentPosition.coords.latitude;
+      var longitude = currrentPosition.coords.longitude;
+
+      // call service locationService in order to retrieve database entries
+      locationService.getLocationsByCoordinates(latitude, longitude, 100000, 10)
+      .success(function(locations) {
+        vm.locations = locations;
+      })
+      .error(function(e) {
+        vm.error = "Sorry, an error occurred. Please try again later!";
       });
     };
 
@@ -761,7 +759,7 @@
         nosupport();
       }
     };
-    
+
     // return inner function getPosition
     return { getPosition : getPosition };
   }

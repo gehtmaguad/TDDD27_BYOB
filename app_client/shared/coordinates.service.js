@@ -17,7 +17,7 @@
         nosupport();
       }
     };
-    
+
     // return inner function getPosition
     return { getPosition : getPosition };
   }
