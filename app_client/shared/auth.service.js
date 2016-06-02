@@ -22,6 +22,7 @@
       return $http.post('/api/login', user)
         // save token when promise returns successful
         .success(function(data) {
+          // save token when promise returns successful
           setToken(data.token);
         });
     };
@@ -48,6 +49,7 @@
       }
       // extract the expire date from the token
       var payload = JSON.parse($window.atob(token.split('.')[1]));
+      // if date is smaller then expire date return true else false
       return payload.exp > Date.now() / 1000;
     };
 
@@ -63,6 +65,7 @@
       };
     };
 
+    // return inner functions
     return {
       setToken: setToken,
       getToken: getToken,

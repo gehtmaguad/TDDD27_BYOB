@@ -1,10 +1,10 @@
 // IIFE (immediately-invoked function expression)
 (function() {
 
-  // register getCoordinates service
-  angular.module('byobApp').service('getCoordinates', getCoordinates);
+  // register coordinatesService
+  angular.module('byobApp').service('coordinatesService', coordinatesService);
 
-  function getCoordinates() {
+  function coordinatesService() {
     // define inner function with callbacks to execute dependent on
     // wether coordinates have been retrieved successfully or not
     var getPosition = function(success, error, nosupport) {
@@ -17,6 +17,7 @@
         nosupport();
       }
     };
+    
     // return inner function getPosition
     return { getPosition : getPosition };
   }

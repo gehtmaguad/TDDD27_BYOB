@@ -4,8 +4,8 @@
   // register controller
   angular.module('byobApp').controller('updateLocationModalCtrl', updateLocationModalCtrl);
 
-  updateLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations', 'locationdata'];
-  function updateLocationModalCtrl($uibModalInstance, getLocations, locationdata) {
+  updateLocationModalCtrl.$inject = ['$uibModalInstance', 'locationService', 'locationdata'];
+  function updateLocationModalCtrl($uibModalInstance, locationService, locationdata) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -42,7 +42,7 @@
       }
 
       // call service
-      getLocations.updateLocation(vm.locationdata.location._id, {
+      locationService.updateLocation(vm.locationdata.location._id, {
         theme: vm.formdata.theme,
         address: vm.formdata.address,
         datum: vm.formdata.datum,

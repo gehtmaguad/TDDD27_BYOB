@@ -17,15 +17,25 @@
         {{ vm.error }}
       </div>
     </div>
-    <!-- filter input field -->
-    <div class="col-xs-11 col-sm-5">
-      <input type="text" placeholder="Filter Preparties" ng-model="filterLocations" class="form-control input-lg filterPreparties">
+    <!-- logged in user: filter input and create new location button -->
+    <div ng-show="vm.isLoggedIn">
+      <!-- filter input field -->
+      <div class="col-xs-11 col-sm-5">
+        <input type="text" placeholder="Filter Preparties" ng-model="filterLocations" class="form-control input-lg filterPreparties">
+      </div>
+      <!-- create new location button -->
+      <div class="col-xs-1 col-sm-1">
+        <button ng-click="vm.createLocationModal()" class="btn btn-default btn-lg">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+      </div>
     </div>
-    <!-- create new location button -->
-    <div class="col-xs-1 col-sm-1">
-      <button ng-show="vm.currentUser.username == location.author" ng-click="vm.createLocationModal()" class="btn btn-default btn-lg">
-        <span class="glyphicon glyphicon-pencil"></span>
-      </button>
+    <!-- not logged in user: only filter input -->
+    <div ng-show="!vm.isLoggedIn">
+      <!-- filter input field -->
+      <div class="col-xs-12 col-sm-6">
+        <input type="text" placeholder="Filter Preparties" ng-model="filterLocations" class="form-control input-lg filterPreparties">
+      </div>
     </div>
   </div>
 </div>
@@ -40,10 +50,10 @@
       <div class="panel-heading">
         <span class="panel-title">{{ location.theme }}</span>
         <div class="pull-right">
-          <button ng-show="vm.currentUser.username == location.author" ng-click="vm.deleteLocationModal(location._id)" class="btn btn-default commentButton">
+          <button ng-show="vm.isLoggedIn && vm.currentUser.username == location.author" ng-click="vm.deleteLocationModal(location._id)" class="btn btn-default commentButton">
             <span class="glyphicon glyphicon-trash"></span>
           </button>
-          <button ng-show="vm.currentUser.username == location.author" ng-click="vm.updateLocationModal(location)" class="btn btn-default commentButton">
+          <button ng-show="vm.isLoggedIn && vm.currentUser.username == location.author" ng-click="vm.updateLocationModal(location)" class="btn btn-default commentButton">
             <span class="glyphicon glyphicon-cog"></span>
           </button>
         </div>

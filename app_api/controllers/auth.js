@@ -4,7 +4,7 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 // load helper module
 var helper = require('./helper');
-// instanciate schema
+// instantiate schema
 var User = mongoose.model('User');
 
 // register new user
@@ -56,7 +56,7 @@ module.exports.login = function(req, res) {
       // if error send 404 not found
       helper.sendJsonResponse(res, 404, err);
     } else if (!user) {
-      // if error send 401 not authorized
+      // if no user send 401 not authorized
       helper.sendJsonResponse(res, 401, err);
     } else {
       // if successful send a response with a json web token

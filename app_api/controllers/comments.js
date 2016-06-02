@@ -64,7 +64,7 @@ module.exports.read = function (req, res) {
 module.exports.create = function(req, res) {
   // create comment is wrapped in getAuthor as a callback
   // in order to use username variable
-  getAuthor(req, res, function(req, res, username) {
+  helper.getAuthor(req, res, function(req, res, username) {
     // get location ID from params
     var locationId = req.params.locationid;
     // check if locationID variable evaluates to false
@@ -123,7 +123,7 @@ module.exports.create = function(req, res) {
 module.exports.update = function(req, res) {
   // create comment is wrapped in getAuthor as a callback
   // in order to use username variable
-  getAuthor(req, res, function(req, res, username) {
+  helper.getAuthor(req, res, function(req, res, username) {
     // declare variables
     var comment;
     // get location ID and comments ID from params
@@ -265,28 +265,4 @@ module.exports.delete = function(req, res) {
         });
       }
     });
-};
-
-// helper function
-var getAuthor = function(req, res, callback) {
-  // validate payload
-  if (!req.payload || !req.payload.email) {
-    helper.sendJsonResponse(res, 401, {"message": "no user found"});
-  }
-  // find user by given email
-  User.findOne({email:req.payload.email})
-    .exec(function(err, user) {
-      if (err) {
-        // if error send 404 not found
-        helper.sendJsonResponse(res, 404, err);
-        return;
-      } else if (!user) {
-        // if error send 401 not authorized
-        helper.sendJsonResponse(res, 401, {"message": "no user found"});
-        return;
-      } else {
-        // if successful execute callback
-        callback(req, res, user.username);
-      }
-  });
 };

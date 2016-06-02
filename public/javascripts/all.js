@@ -219,8 +219,8 @@
   // register controller
   angular.module('byobApp').controller('createLocationModalCtrl', createLocationModalCtrl);
 
-  createLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations'];
-  function createLocationModalCtrl($uibModalInstance, getLocations) {
+  createLocationModalCtrl.$inject = ['$uibModalInstance', 'locationService'];
+  function createLocationModalCtrl($uibModalInstance, locationService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -252,7 +252,7 @@
       }
 
       // call service
-      getLocations.addLocation({
+      locationService.addLocation({
         theme: vm.formdata.theme,
         datum: vm.formdata.datum,
         address: vm.formdata.address,
@@ -325,8 +325,8 @@
   // register controller
   angular.module('byobApp').controller('deleteLocationModalCtrl', deleteLocationModalCtrl);
 
-  deleteLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations', 'locationdata'];
-  function deleteLocationModalCtrl($uibModalInstance, getLocations, locationdata) {
+  deleteLocationModalCtrl.$inject = ['$uibModalInstance', 'locationService', 'locationdata'];
+  function deleteLocationModalCtrl($uibModalInstance, locationService, locationdata) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -351,7 +351,7 @@
     // on submit method
     vm.onSubmit = function() {
       // call service
-      getLocations.deleteLocationById(vm.locationdata.locationid)
+      locationService.deleteLocationById(vm.locationdata.locationid)
       .success(function(data) {
         vm.modal.close(data);
       // if error fill error variable
@@ -371,8 +371,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
 
-  locationdetailCtrl.$inject = ['$routeParams', '$uibModal', 'getLocations', 'commentService', 'authService'];
-  function locationdetailCtrl($routeParams, $uibModal, getLocations, commentService, authService) {
+  locationdetailCtrl.$inject = ['$routeParams', '$uibModal', 'locationService', 'authService'];
+  function locationdetailCtrl($routeParams, $uibModal, locationService, authService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -383,7 +383,7 @@
     vm.currentUser = authService.currentUser();
 
     // get location details by calling service and passing url prameter
-    getLocations.getLocationDetailById($routeParams.locationid)
+    locationService.getLocationDetailById($routeParams.locationid)
       .success(function(location) {
         vm.location = location;
 
@@ -489,8 +489,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationlistCtrl', locationlistCtrl);
 
-  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates', 'authService'];
-  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates, authService) {
+  locationlistCtrl.$inject = ['$scope', '$uibModal', 'locationService', 'coordinatesService', 'authService'];
+  function locationlistCtrl($scope, $uibModal, locationService, coordinatesService, authService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -509,8 +509,8 @@
       var latitude = currrentPosition.coords.latitude;
       var longitude = currrentPosition.coords.longitude;
 
-      // call service getLocations in order to retrieve database entries
-      getLocations.getLocationsByCoordinates(latitude, longitude, 100000, 10)
+      // call service locationService in order to retrieve database entries
+      locationService.getLocationsByCoordinates(latitude, longitude, 100000, 10)
       .success(function(locations) {
         vm.locations = locations;
       })
@@ -601,9 +601,9 @@
       });
     };
 
-    // call service getCoordinates and pass callback functions
-    // this further calls the service getLocations in case of success
-    getCoordinates.getPosition(vm.successFunc,
+    // call coordinatesService and pass callback functions
+    // this further calls the locationService in case of success
+    coordinatesService.getPosition(vm.successFunc,
       vm.errorFunc, vm.noSupportFunc);
 
   }
@@ -634,6 +634,7 @@
       return $http.post('/api/login', user)
         // save token when promise returns successful
         .success(function(data) {
+          // save token when promise returns successful
           setToken(data.token);
         });
     };
@@ -660,6 +661,7 @@
       }
       // extract the expire date from the token
       var payload = JSON.parse($window.atob(token.split('.')[1]));
+      // if date is smaller then expire date return true else false
       return payload.exp > Date.now() / 1000;
     };
 
@@ -675,6 +677,7 @@
       };
     };
 
+    // return inner functions
     return {
       setToken: setToken,
       getToken: getToken,
@@ -697,8 +700,10 @@
 
   commentService.$inject = ['$http', 'authService'];
   function commentService($http, authService) {
-    // define inner function with parameters and execute API call
+
+    // add a comment
     var addCommentById = function(locationid, data) {
+      // call serverside api with post data and auth header
       return $http.post('/api/locations/' + locationid + '/comments', data, {
         headers: {
           Authorization: 'Bearer ' + authService.getToken()
@@ -706,7 +711,9 @@
       });
     };
 
+    // delete a comment
     var deleteCommentById = function(locationid, commentid) {
+      // call serverside api with auth header
       return $http.delete(
         '/api/locations/' + locationid + '/comments/' + commentid, {
           headers: {
@@ -715,7 +722,9 @@
         });
     };
 
+    // update a comment
     var updateCommentById = function(locationid, commentid, data) {
+      // call serverside api with post data and auth header
       return $http.put('/api/locations/' + locationid + '/comments/' + commentid, data, {
         headers: {
           Authorization: 'Bearer ' + authService.getToken()
@@ -723,7 +732,7 @@
       });
     };
 
-    // return inner function
+    // return inner functions
     return {
       addCommentById: addCommentById,
       deleteCommentById: deleteCommentById,
@@ -736,10 +745,10 @@
 // IIFE (immediately-invoked function expression)
 (function() {
 
-  // register getCoordinates service
-  angular.module('byobApp').service('getCoordinates', getCoordinates);
+  // register coordinatesService
+  angular.module('byobApp').service('coordinatesService', coordinatesService);
 
-  function getCoordinates() {
+  function coordinatesService() {
     // define inner function with callbacks to execute dependent on
     // wether coordinates have been retrieved successfully or not
     var getPosition = function(success, error, nosupport) {
@@ -752,6 +761,7 @@
         nosupport();
       }
     };
+    
     // return inner function getPosition
     return { getPosition : getPosition };
   }
@@ -797,14 +807,17 @@
 // IIFE (immediately-invoked function expression)
 (function() {
 
-  // register getLocations service
-  angular.module('byobApp').service('getLocations', getLocations);
+  // register locationService
+  angular.module('byobApp').service('locationService', locationService);
 
-  getLocations.$inject = ['$http', 'authService'];
-  function getLocations($http, authService) {
-    // define inner function with parameters and execute API call
+  locationService.$inject = ['$http', 'authService'];
+  function locationService($http, authService) {
+    // define inner functions with parameters and execute API call
+
+    // get all locations sorted by distance
     var getLocationsByCoordinates = function(latitude, longitude,
       distance, maxElements) {
+      // call serverside api with parameters
       return $http.get('/api/locations?' +
         'longitude=' + longitude +
         '&latitude=' + latitude +
@@ -812,11 +825,14 @@
         '&maxElements=' + maxElements);
     };
 
+    // get specific location
     var getLocationDetailById = function (locationid) {
+      // call serverside api with parameter
       return $http.get('/api/locations/' + locationid);
     };
 
     var addLocation = function(data) {
+      // call serverside api with post data and auth header
       return $http.post('/api/locations', data, {
         headers: {
           Authorization: 'Bearer ' + authService.getToken()
@@ -825,6 +841,7 @@
     };
 
     var deleteLocationById = function(locationid) {
+      // call serverside api with auth header
       return $http.delete(
         '/api/locations/' + locationid, {
           headers: {
@@ -834,6 +851,7 @@
     };
 
     var updateLocation = function(locationid, data) {
+      // call serverside api with post data and auth header
       return $http.put('/api/locations/' + locationid, data, {
         headers: {
           Authorization: 'Bearer ' + authService.getToken()
@@ -841,7 +859,7 @@
       });
     };
 
-    // return inner function getLocationsByCoordinates
+    // return inner function
     return {
       getLocationsByCoordinates: getLocationsByCoordinates,
       getLocationDetailById: getLocationDetailById,
@@ -959,8 +977,8 @@
   // register controller
   angular.module('byobApp').controller('updateLocationModalCtrl', updateLocationModalCtrl);
 
-  updateLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations', 'locationdata'];
-  function updateLocationModalCtrl($uibModalInstance, getLocations, locationdata) {
+  updateLocationModalCtrl.$inject = ['$uibModalInstance', 'locationService', 'locationdata'];
+  function updateLocationModalCtrl($uibModalInstance, locationService, locationdata) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -997,7 +1015,7 @@
       }
 
       // call service
-      getLocations.updateLocation(vm.locationdata.location._id, {
+      locationService.updateLocation(vm.locationdata.location._id, {
         theme: vm.formdata.theme,
         address: vm.formdata.address,
         datum: vm.formdata.datum,

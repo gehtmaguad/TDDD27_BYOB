@@ -95,14 +95,12 @@ module.exports.listByDistance = function(req, res) {
 module.exports.create = function(req, res) {
   // create comment is wrapped in getAuthor as a callback
   // in order to use username variable
-  getAuthor(req, res, function(req, res, username) {
+  helper.getAuthor(req, res, function(req, res, username) {
     var geocoderProvider = 'google';
     var httpAdapter = 'https';
     // optional
     var extra = {
         apiKey: process.env.API_KEY,
-        // TODO
-        //apiKey: 'AIzaSyCUy8YzvCFHzc8SMvykFhP6WGcMJLZwR-k',
         formatter: null
     };
     var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
@@ -143,14 +141,12 @@ module.exports.create = function(req, res) {
 
 // PUT location by ID
 module.exports.update = function (req, res) {
-  getAuthor(req, res, function(req, res, username) {
+  helper.getAuthor(req, res, function(req, res, username) {
     var geocoderProvider = 'google';
     var httpAdapter = 'https';
     // optional
     var extra = {
         apiKey: process.env.API_KEY,
-        // TODO
-        //apiKey: 'AIzaSyCUy8YzvCFHzc8SMvykFhP6WGcMJLZwR-k',
         formatter: null
     };
     var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter, extra);
@@ -218,27 +214,4 @@ module.exports.delete = function(req, res) {
       // Respond with 200 Ok
       helper.sendJsonResponse(res, 200, location);
     });
-};
-
-// helper function
-var getAuthor = function(req, res, callback) {
-  // validate payload
-  if (!req.payload || !req.payload.email) {
-    helper.sendJsonResponse(res, 401, {"message": "no user found"});
-  }
-  // find user by given email
-  User.findOne({email:req.payload.email})
-    .exec(function(err, user) {
-      if (err) {
-        // if error send 404 not found
-        helper.sendJsonResponse(res, 404, err);
-        return;
-      } else if (!user) {
-        // if error send 401 not authorized
-        helper.sendJsonResponse(res, 401, {"message": "no user found"});
-      } else {
-        // if successful execute callback
-        callback(req, res, user.username);
-      }
-  });
 };

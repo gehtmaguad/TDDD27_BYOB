@@ -4,8 +4,8 @@
   // register controller
   angular.module('byobApp').controller('deleteLocationModalCtrl', deleteLocationModalCtrl);
 
-  deleteLocationModalCtrl.$inject = ['$uibModalInstance', 'getLocations', 'locationdata'];
-  function deleteLocationModalCtrl($uibModalInstance, getLocations, locationdata) {
+  deleteLocationModalCtrl.$inject = ['$uibModalInstance', 'locationService', 'locationdata'];
+  function deleteLocationModalCtrl($uibModalInstance, locationService, locationdata) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -30,7 +30,7 @@
     // on submit method
     vm.onSubmit = function() {
       // call service
-      getLocations.deleteLocationById(vm.locationdata.locationid)
+      locationService.deleteLocationById(vm.locationdata.locationid)
       .success(function(data) {
         vm.modal.close(data);
       // if error fill error variable

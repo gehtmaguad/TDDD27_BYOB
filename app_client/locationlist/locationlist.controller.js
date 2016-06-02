@@ -4,8 +4,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationlistCtrl', locationlistCtrl);
 
-  locationlistCtrl.$inject = ['$scope', '$uibModal', 'getLocations', 'getCoordinates', 'authService'];
-  function locationlistCtrl($scope, $uibModal, getLocations, getCoordinates, authService) {
+  locationlistCtrl.$inject = ['$scope', '$uibModal', 'locationService', 'coordinatesService', 'authService'];
+  function locationlistCtrl($scope, $uibModal, locationService, coordinatesService, authService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -24,8 +24,8 @@
       var latitude = currrentPosition.coords.latitude;
       var longitude = currrentPosition.coords.longitude;
 
-      // call service getLocations in order to retrieve database entries
-      getLocations.getLocationsByCoordinates(latitude, longitude, 100000, 10)
+      // call service locationService in order to retrieve database entries
+      locationService.getLocationsByCoordinates(latitude, longitude, 100000, 10)
       .success(function(locations) {
         vm.locations = locations;
       })
@@ -116,9 +116,9 @@
       });
     };
 
-    // call service getCoordinates and pass callback functions
-    // this further calls the service getLocations in case of success
-    getCoordinates.getPosition(vm.successFunc,
+    // call coordinatesService and pass callback functions
+    // this further calls the locationService in case of success
+    coordinatesService.getPosition(vm.successFunc,
       vm.errorFunc, vm.noSupportFunc);
 
   }

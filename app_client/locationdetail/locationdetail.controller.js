@@ -4,8 +4,8 @@
   // register locationlistCtrl
   angular.module('byobApp').controller('locationdetailCtrl', locationdetailCtrl);
 
-  locationdetailCtrl.$inject = ['$routeParams', '$uibModal', 'getLocations', 'commentService', 'authService'];
-  function locationdetailCtrl($routeParams, $uibModal, getLocations, commentService, authService) {
+  locationdetailCtrl.$inject = ['$routeParams', '$uibModal', 'locationService', 'authService'];
+  function locationdetailCtrl($routeParams, $uibModal, locationService, authService) {
 
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
@@ -16,7 +16,7 @@
     vm.currentUser = authService.currentUser();
 
     // get location details by calling service and passing url prameter
-    getLocations.getLocationDetailById($routeParams.locationid)
+    locationService.getLocationDetailById($routeParams.locationid)
       .success(function(location) {
         vm.location = location;
 
