@@ -495,6 +495,7 @@
     // bind 'this' to vm and use vm to attach variables for more clarity
     // also 'this' is very context sensitive and could be problematic to use
     var vm = this;
+    vm.loading = "true";
     // Check if user is logged in
     vm.isLoggedIn = authService.isLoggedIn();
     // Get current user
@@ -572,6 +573,7 @@
     vm.errorFunc = function(error) {
       $scope.$apply(function() {
         vm.error = error.message;
+        vm.loading = "";
       });
     };
 
@@ -579,6 +581,7 @@
     vm.noSupportFunc = function() {
       $scope.$apply(function() {
         vm.error = "Geolocation not supported by this browser";
+        vm.loading = "";
       });
     };
 
@@ -593,9 +596,11 @@
       locationService.getLocationsByCoordinates(latitude, longitude, 100000, 10)
       .success(function(locations) {
         vm.locations = locations;
+        vm.loading = "";
       })
       .error(function(e) {
         vm.error = "Sorry, an error occurred. Please try again later!";
+        vm.loading = "";
       });
     };
 

@@ -42,6 +42,10 @@
 
 <!-- location list -->
 <div class="row">
+  <div ng-show="vm.loading">
+    <span>Getting the newest data for you, this can take a short moment ...</span>
+    <span class="glyphicon glyphicon-refresh glyphicon-spin"></span>
+  </div>
   <!-- ng-repeat directive and filter expression -->
   <!-- loop through locations with angular directive and applies filter defined in filter input field -->
   <div ng-repeat="location in vm.locations | filter : filterLocations as filteredLocations" class="col-xs-12 col-md-6">
